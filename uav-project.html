@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAV Project - Yunhao Liang</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html">About</a>
+        <a href="education.html">Education</a>
+        <a href="research.html">Research & Projects</a>
+        <a href="experience.html">Work Experience</a>
+        <a href="interests.html">Interests</a>
+    </nav>
+
+    <section id="project-detail">
+        <div class="project-header">
+            <h2>UAV Path Planning</h2>
+            <div class="project-meta">
+                <span>UC Berkeley</span>
+                <span>With Prof. Mark W. Mueller</span>
+            </div>
+        </div>
+
+        <div class="project-sections">
+            <div class="section">
+                <h3>Path Planning</h3>
+                <p>Implementation of DARP and MST algorithms for optimal route planning.</p>
+                <div class="image-grid three-images">
+                    <img src="images/path1.png" alt="Path Planning 1" class="project-img">
+                    <img src="images/path2.png" alt="Path Planning 2" class="project-img">
+                    <img src="images/path3.png" alt="Path Planning 3" class="project-img">
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Data Transmission & Sensors</h3>
+                <p>Testing ESP32 transmitter with simulated signals and implementing soil sensors for agricultural monitoring.</p>
+                <div class="image-grid two-images">
+                    <img src="images/data1.png" alt="ESP32 Transmitter Setup" class="project-img">
+                    <img src="images/data2.png" alt="Soil Sensors" class="project-img">
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Autonomous System</h3>
+                <p>Integration of sensor data with decision-making algorithms.</p>
+                <div class="media-content">
+                    <img src="images/auto.png" alt="Autonomous System" class="project-img">
+                    <video controls class="project-video">
+                        <source src="videos/autonomous.mov" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <footer>
+        <p>© 2025 Yunhao Liang. All rights reserved.</p>
+    </footer>
+
+    <script>
+        var modal = document.getElementById("imageModal");
+        var modalImg = document.getElementById("modalImg");
+        var span = document.getElementsByClassName("modal-close")[0];
+
+        document.querySelectorAll('.project-img').forEach(img => {
+            img.onclick = function() {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+            }
+        });
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        modal.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html> 

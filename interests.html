@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interests - Yunhao Liang</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html">About</a>
+        <a href="education.html">Education</a>
+        <a href="research.html">Research & Projects</a>
+        <a href="experience.html">Work Experience</a>
+        <a href="interests.html">Interests</a>
+    </nav>
+
+    <section id="interests">
+        <h2>Fun Facts About Me</h2>
+
+        <div class="interests-grid">
+            <div class="interest-card">
+                <div class="interest-icon">🎮</div>
+                <h3>Gaming</h3>
+                <p>Enjoy competitive games like VALORANT and story-rich experiences like Black Myth: Wukong. Also a fan of League of Legends.</p>
+                <div class="game-tags">
+                    <span>VALORANT</span>
+                    <span>Black Myth: Wukong</span>
+                    <span>LoL</span>
+                </div>
+            </div>
+
+            <div class="interest-card">
+                <div class="interest-icon">💪</div>
+                <h3>Fitness</h3>
+                <p>Regular gym-goer focusing on strength training and overall wellness. Believe in maintaining a healthy work-life balance.</p>
+                <div class="interest-image">
+                    <img src="images/gym.jpg" alt="One Year Fitness Progress" class="progress-img" onclick="openModal(this.src)">
+                </div>
+            </div>
+
+            <div class="interest-card">
+                <div class="interest-icon">🎵</div>
+                <h3>Music</h3>
+                <p>Love creating and producing music in my free time. Enjoy experimenting with different genres and digital music production.</p>
+                <div class="interest-image">
+                    <img src="images/music.jpg" alt="My Music Studio" class="studio-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 添加模态框 -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <script>
+        // 获取模态框元素
+        var modal = document.getElementById("imageModal");
+        var modalImg = document.getElementById("modalImg");
+        var span = document.getElementsByClassName("modal-close")[0];
+
+        // 打开模态框
+        function openModal(imgSrc) {
+            modal.style.display = "block";
+            modalImg.src = imgSrc;
+        }
+
+        // 点击 × 关闭模态框
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // 点击模态框外部关闭
+        modal.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+    <footer>
+        <p>© 2025 Yunhao Liang. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research & Projects - Yunhao Liang</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html">About</a>
+        <a href="education.html">Education</a>
+        <a href="research.html">Research & Projects</a>
+        <a href="experience.html">Work Experience</a>
+        <a href="interests.html">Interests</a>
+    </nav>
+
+    <section id="research">
+        <h2>Research & Projects</h2>
+
+        <div class="research-section current">
+            <h3>🔬 Current Research</h3>
+            
+            <div class="project-grid">
+                <div class="project-card">
+                    <h4>UAV Path Planning</h4>
+                    <div class="project-meta">
+                        <div class="institution">UC Berkeley</div>
+                        <div class="supervisor">Prof. Mark W. Mueller</div>
+                    </div>
+                    <p>Optimizing UAV paths for agricultural data collection:</p>
+                    <ul>
+                        <li>DARP & MST algorithms</li>
+                        <li>Data transmission</li>
+                        <li>Automated decision-making</li>
+                    </ul>
+                    <button class="toggle-details" onclick="location.href='uav-project.html'">Learn More →</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="research-section past">
+            <h3>💡 Past Projects</h3>
+            
+            <div class="project-grid">
+                <div class="project-card">
+                    <h4>Smart City Innovation</h4>
+                    <div class="project-meta">
+                        <div class="institution">Chongqing University</div>
+                        <div class="duration">2023-2024</div>
+                    </div>
+                    <p>Analyzing Smart City Pilot Plan impact:</p>
+                    <ul>
+                        <li>Multi-period DID model</li>
+                        <li>296 cities study</li>
+                        <li>20-year data analysis</li>
+                    </ul>
+                    <a href="https://doi.org/10.3390/su16188007" target="_blank">Paper →</a>
+                </div>
+
+                <div class="project-card">
+                    <h4>Yin Music Platform</h4>
+                    <div class="project-meta">
+                        <div class="institution">Personal Project</div>
+                        <a href="https://github.com/YunhaoLiang/Yin-Music-Steaming-Platform" target="_blank">GitHub →</a>
+                    </div>
+                    <p>Full-stack music platform:</p>
+                    <ul>
+                        <li>Spring Boot backend</li>
+                        <li>Vue.js frontend</li>
+                        <li>MySQL optimization</li>
+                    </ul>
+                </div>
+
+                <div class="project-card">
+                    <h4>Blood Donation System</h4>
+                    <div class="project-meta">
+                        <div class="institution">University of Pittsburgh</div>
+                        <div class="supervisor">Prof. Bo Zeng</div>
+                    </div>
+                    <p>Hospital transfusion simulation:</p>
+                    <ul>
+                        <li>Simio modeling</li>
+                        <li>Kenyan hospitals study</li>
+                        <li>UPMC collaboration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Yunhao Liang. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.querySelector('.toggle-details').addEventListener('click', function() {
+            const details = this.parentElement;
+            details.classList.toggle('expanded');
+            this.textContent = details.classList.contains('expanded') ? 'Show Less' : 'View Details';
+        });
+    </script>
+</body>
+</html> 

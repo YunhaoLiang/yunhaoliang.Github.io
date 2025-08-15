@@ -1,0 +1,132 @@
+Yunhao LIANG
+(412) 980-3145 | yunhaoliang8@gmail.com
+https://yunhaoliang.github.io/
+
+EDUCATION
+University of California, Berkeley (UCB) (College of Engineering)
+CA, US
+M.E. in Industrial Engineering and Operations Research | GPA: 3.98/4.0
+Aug 2024 - May 2025
+ Relevant coursework: Machine Learning, Deep Learning, Applied Optimization, Stochastic Processes,
+Supply Chains and Logistics Management
+University of Pittsburgh (Swanson School of Engineering)
+PA, US
+B.S. in Industrial Engineering, minor in Computer Science | GPA: 3.70/4.0
+Aug 2022 - May 2024
+ Relevant coursework: Supply chain Analysis, Engineering Economics, Game theory
+Sichuan University (Sichuan University-Pittsburgh Institute)
+Chengdu, China
+B.S. in Industrial Engineering | GPA: 3.43/4.0
+Aug 2020 - May 2022
+ Relevant Courses: Human Factor Engineering, Probability and Statistics
+PUBLICATIONS
+ Chen, S., Zhang, X., Wang, W., Liang, Y., He, W., & Tan, Z. (2024). The effect of smart city policies on
+city innovation: A quasi-natural experiment from the smart city pilot cities in China.
+Sustainability,16(8007). https://doi.org/10.3390/su16188007
+ Liang, Y., Qu, Y., Yang, J., Lin, S., Shen, Max. (Under Review at AAAI 2026). Everyone Contributes!
+Incentivizing Strategic Cooperation in Multi-LLM Systems via Sequential Public Goods Games.
+http://arxiv.org/abs/2508.02076
+ Liang, Y., Liu, Q., Teaya, Yang., Mark W. Mueller (Working Paper). Optimizing UAV path planning and
+wireless data transfer under battery and communication constraints.
+RESEARCH EXPERIENCE
+Sequential Public Goods Game (SPGG) with Multi-LLM Agents Cooperation.
+HK, China
+Research Assistant, Supervisors: Prof. Max Shen & Prof. Shaochong Lin, HKU
+May 2025 - Present
+ Developed a multi-agent framework based on the Sequential Public Goods Game (SPGG) to study
+cooperation among LLM-based agents
+ Incorporated game-theoretic concepts such as Subgame Perfect Nash Equilibrium, belief updating, and
+conditional cooperation to model and interpret emergent behaviors across different information regimes (full
+vs. partial observability)
+Path Planning and Data Transmission for UAVs in Precision Agriculture
+CA, US
+Research Assistant, Supervisor: Prof. Mark W. Mueller, UCB
+Sep 2024 - May 2025
+ Developed optimization and reinforcement learning-based models for UAV path planning, explicitly
+modeling operator behaviors and decision-making under communication constraints
+ Explored human-AI interaction frameworks by simulating decision-making scenarios involving UAV
+operators and intelligent autonomous systems
+ Conducted research on automating UAV operations by integrating path planning algorithms with sensorbased decision-making frameworks to enhance overall system efficiency
+ Drafting a paper on optimizing UAV path planning and wireless data transfer
+Image-to-Text AI System Based on Large Language Models | Link
+CA, US
+Independent Project
+Feb 2025 - Mar 2025
+ Built an AI pipeline that processes visual data (e.g., forms, handwritten notes) into structured text using
+multi-modal large language models
+ Explored prompt engineering and model fine-tuning for Pix2Text and Pix2Struct to improve accuracy and
+generalizability
+ Developed a Mini Program interface for real-world deployment; backend in progress
+ Gained practical experience in handling unstructured data, LLM integration, and AI system development for
+intelligent decision-making
+Smart City Policies and Urban Innovation
+Chongqing, China
+Research Assistant, Supervisor: Prof. Zhixiong Tan, Chongqing University
+Aug 2023 - Aug 2024
+
+ Investigated the impact of China's Smart City Pilot Plan on urban innovation using a multi-period
+difference-in-differences (DID) model
+ Developed robust empirical models to analyze the effects of smart city policies on industrial upgrading and
+informatization in 296 prefecture-level cities from 2001 to 2021
+ Conducted extensive data curation and formal analysis, focusing on urban innovation indicators
+ Collaborated on the drafting and editing of a research paper
+Blood Donation Willingness Math Model and Supply Chain Optimization
+PA, US
+Research Assistant, Supervisor: Prof. Bo Zeng, University of Pittsburgh
+Oct 2023 - Feb 2024
+ Collaborated on analysis of supplier-demand dynamics in blood transfusion systems within Kenyan
+hospitals
+ Created simulation models to prioritize blood transfusion demand and inventory levels utilizing Simio
+ Coordinated with doctors from the University of Pittsburgh Medical Center (UPMC) to assess the practical
+feasibility of the proposed plan in real-world scenarios
+Music Streaming Platform Establishment | Link
+Chengdu, China
+Member, Music Association, Sichuan University
+Jan 2023 - Nov 2023
+ Designed a proprietary music streaming platform tailored for singer-songwriter groups within the university
+ Developed and implemented a MySQL database using Java Spring Boot, supporting CRUD operations and
+query optimization
+ Collaborated with team members to integrate customized Vue.js frontend with Java backend services
+Inverse Operation Research
+PA, US
+Research Assistant, Supervisor: Prof. Tarwoo Lee, University of Pittsburgh
+Jan 2023 - Mar 2023
+ Conducted literature review for foundational concepts and existing methods of inverse optimization
+ Investigated inverse optimization methods based on both linear and nonlinear programming
+PROFESSIONAL EXPERIENCE
+Improving Efficiency: Alstom’s Subassembly Layout Overhaul
+PA, US
+Supply Chain Analyst Intern, Alstom Company
+Jan 2024 - Apr 2024
+ Partnered with Alstom to address inefficiencies in their West Mifflin facility’s subassembly process for airport rail
+systems
+ Integrated Lean Six Sigma, 5S methodologies, and facility layout theory to improve workflow and space utilization,
+achieving a potential 49% improvement in layout efficiency
+ Employed systematic layout planning and visual management tools to enhance process efficiency and team
+communication
+Sichuan Dazhou Iron & Steel Group Co., Ltd.
+Dazhou, China
+Data Analyst Intern, Technology Center
+Jul 2022 - Aug 2022
+ Participated in production data analysis, monitored key production indicators (e.g., steel output, energy
+consumption), assisted in optimizing production plans, and improving material flow efficiency
+ 15 sets of data from the production workshop (including blast furnace operation, cold-rolled steel production,
+inventory turnover, etc.), data cleaning, feature extraction, and providing data support for production scheduling
+optimization
+SKILLS
+Languages: Chinese - native; English - fluent
+Computer Techniques: Java, Python, R, Gurobi, PyTorch, SolidWorks, Simio, MATLAB, SPSS, Stata 16, MySQL
+HONORS & COMMUNITY ENGAGEMENT
+Team Honors List and Dean’s List | University of Pittsburgh
+Second Place | Swanson School of Engineering - Senior Project | University of Pittsburgh
+Fung Excellence Scholarship (USD $15,000) | UCB
+Engineering Student Association | Team member | University of Pittsburgh
+Student Association | Photographer | Sichuan University - Pittsburgh Institute
+
+Aug 2022 - Apr 2024
+Jan 2024 - Apr 2024
+Aug 2024 - May 2025
+Sept 2022 – Jul 2023
+Sept 2020 – Jul 2021
+
+

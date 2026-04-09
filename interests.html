@@ -1,77 +1,337 @@
-<!DOCTYPE html>
-<html lang="zh">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interests - Yunhao Liang</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beyond Research - Yunhao Liang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050507;
+      --bg-panel: #0a0a14;
+      --text: #f3efe8;
+      --text-muted: rgba(243,239,232,0.45);
+      --text-dim: rgba(243,239,232,0.10);
+      --red: #7a0f1f;
+      --red-bright: #c41230;
+      --gold: #b59b52;
+      --violet: #8b7cf6;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.15);
+      --radius: 20px;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* GRAIN */
+    .grain {
+      position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none; opacity: 0.035; mix-blend-mode: overlay;
+    }
+    .grain svg { width: 100%; height: 100%; }
+
+    /* ATMO */
+    .atmo { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: 0; }
+    .atmo-1 { width: 600px; height: 600px; top: -150px; right: -100px; background: radial-gradient(circle, rgba(122,15,31,0.22), transparent 70%); }
+    .atmo-2 { width: 500px; height: 500px; bottom: 20%; left: -150px; background: radial-gradient(circle, rgba(59,15,42,0.18), transparent 70%); }
+
+    /* NAV */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 48px;
+      background: rgba(5,5,7,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+    .nav-logo { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 6px; }
+    .nav-links a {
+      font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 2px; padding: 8px 20px;
+      border: 1px solid var(--border); border-radius: 30px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      border-color: var(--border-hover); background: rgba(255,255,255,0.03);
+    }
+
+    /* PAGE */
+    .page {
+      max-width: 1400px; margin: 0 auto;
+      padding: 160px 48px 120px;
+      position: relative; z-index: 1;
+    }
+    .bg-text {
+      position: absolute;
+      font-family: var(--font-display);
+      font-size: clamp(6rem, 14vw, 13rem);
+      color: var(--text-dim);
+      white-space: nowrap; pointer-events: none; user-select: none;
+      top: 80px; left: -20px;
+    }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 4px; margin-bottom: 60px;
+      position: relative; z-index: 2;
+    }
+
+    /* GRID */
+    .interests-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      position: relative; z-index: 2;
+    }
+    .interest-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+    }
+    .interest-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    /* card with photo: photo on top */
+    .card-photo {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+      transition: transform 0.5s;
+    }
+    .interest-card:hover .card-photo { transform: scale(1.03); }
+    .card-body { padding: 26px 28px 30px; }
+
+    /* text-only card */
+    .card-body-full { padding: 32px 28px 34px; }
+
+    .card-icon {
+      font-size: 2rem; margin-bottom: 10px; display: block;
+      line-height: 1;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem; letter-spacing: 2px; margin-bottom: 12px;
+    }
+    .card-desc {
+      font-size: 0.9rem; color: var(--text-muted); line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .card-tags span {
+      font-family: var(--font-mono); font-size: 0.62rem;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 6px 12px;
+      border: 1px solid var(--border); border-radius: 20px;
+      color: var(--text-muted);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 5000;
+      background: rgba(5,5,7,0.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-img-wrap {
+      position: relative; max-width: 860px; width: 90%;
+    }
+    .modal-img-wrap img {
+      width: 100%; border-radius: var(--radius);
+      border: 1px solid var(--border);
+      display: block;
+    }
+    .modal-close {
+      position: absolute; top: -18px; right: -18px;
+      width: 44px; height: 44px;
+      border: 1px solid var(--border); border-radius: 50%;
+      background: var(--bg-panel); color: var(--text-muted);
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .modal-close:hover { border-color: var(--text); color: var(--text); }
+
+    /* FOOTER */
+    .footer {
+      padding: 40px 48px; text-align: center;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);
+      border-top: 1px solid var(--border); position: relative; z-index: 1;
+    }
+
+    @media (max-width: 860px) {
+      .page { padding: 120px 24px 80px; }
+      .nav { padding: 16px 24px; }
+      .nav-links a { padding: 6px 14px; font-size: 0.6rem; }
+      .interests-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="index.html">About</a>
-        <a href="education.html">Education</a>
-        <a href="research.html">Research & Projects</a>
-        <a href="experience.html">Work Experience</a>
-        <a href="interests.html">Beyond Research</a>
-    </nav>
 
-    <section id="interests">
-        <h2>Fun Facts About Me</h2>
+  <div class="grain">
+    <svg><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
+  </div>
+  <div class="atmo atmo-1"></div>
+  <div class="atmo atmo-2"></div>
 
-        <div class="interests-grid">
-            <div class="interest-card">
-                <div class="interest-icon">💪</div>
-                <h3>Fitness</h3>
-                <p>Regular gym-goer focusing on strength training and overall wellness. Believe in maintaining a healthy work-life balance.</p>
-                <div class="fitness-progress">
-                    <button class="view-progress-btn" onclick="openModal('images/gym.jpg')">View Progress →</button>
-                </div>
-            </div>
-
-            <div class="interest-card">
-                <div class="interest-icon">🎵</div>
-                <h3>My Studio</h3>
-                <p>Love creating and producing music in my home studio. I enjoy experimenting with different genres and digital music production.</p>
-                <div class="interest-image">
-                    <img src="images/music.jpg" alt="My Music Studio" class="studio-img">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 添加模态框 -->
-    <div id="imageModal" class="modal">
-        <span class="modal-close">&times;</span>
-        <img class="modal-content" id="modalImg">
+  <nav class="nav">
+    <div class="nav-logo">YL</div>
+    <div class="nav-links">
+      <a href="index.html">About</a>
+      <a href="index.html#education">Education</a>
+      <a href="index.html#projects">Research</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="interests.html" class="active">Beyond Research</a>
     </div>
+  </nav>
 
-    <script>
-        // 获取模态框元素
-        var modal = document.getElementById("imageModal");
-        var modalImg = document.getElementById("modalImg");
-        var span = document.getElementsByClassName("modal-close")[0];
+  <div class="page">
+    <div class="bg-text">BEYOND</div>
+    <div class="page-title">BEYOND RESEARCH</div>
 
-        // 打开模态框
-        function openModal(imgSrc) {
-            modal.style.display = "block";
-            modalImg.src = imgSrc;
-        }
+    <div class="interests-grid">
 
-        // 点击 × 关闭模态框
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
+      <!-- PAINTING -->
+      <div class="interest-card">
+        <img
+          class="card-photo"
+          src="images/painting.png"
+          alt="Spider-Verse painting in progress"
+          onclick="openModal(this.src)"
+        >
+        <div class="card-body">
+          <span class="card-icon">馃帹</span>
+          <div class="card-title">OIL PAINTING</div>
+          <p class="card-desc">
+            Canvas, palette knife, and a Spider-Man mask. I paint scenes from the Spider-Verse universe &mdash; mixing comic-style color fields with loose brushwork. There's something meditative about translating cinematic frames into physical paint.
+          </p>
+          <div class="card-tags">
+            <span>Oil on Canvas</span>
+            <span>Spider-Verse</span>
+            <span>Comic Art</span>
+          </div>
+        </div>
+      </div>
 
-        // 点击模态框外部关闭
-        modal.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
+      <!-- GAMING -->
+      <div class="interest-card">
+        <div class="card-body-full">
+          <span class="card-icon">馃幃</span>
+          <div class="card-title">GAMING</div>
+          <p class="card-desc">
+            Enjoy competitive games like VALORANT and story-rich experiences like Black Myth: Wukong. Also a long-time fan of League of Legends.
+          </p>
+          <div class="card-tags">
+            <span>VALORANT</span>
+            <span>Black Myth: Wukong</span>
+            <span>LoL</span>
+          </div>
+        </div>
+      </div>
 
-    <footer>
-        <p>© 2025 Yunhao Liang. All rights reserved.</p>
-    </footer>
+      <!-- FITNESS -->
+      <div class="interest-card">
+        <div class="card-body-full">
+          <span class="card-icon">馃挭</span>
+          <div class="card-title">FITNESS</div>
+          <p class="card-desc">
+            Regular gym-goer focusing on strength training and overall wellness. I believe maintaining a healthy work-life balance is its own optimization problem.
+          </p>
+          <div class="card-tags">
+            <span>Strength Training</span>
+            <span>Wellness</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MUSIC STUDIO -->
+      <div class="interest-card">
+        <img
+          class="card-photo"
+          src="images/music.jpg"
+          alt="My home studio setup"
+          onclick="openModal(this.src)"
+        >
+        <div class="card-body">
+          <span class="card-icon">馃幍</span>
+          <div class="card-title">MY STUDIO</div>
+          <p class="card-desc">
+            Love creating and producing music in my home studio. I enjoy experimenting with different genres and digital music production &mdash; from lo-fi beats to electronic.
+          </p>
+          <div class="card-tags">
+            <span>Music Production</span>
+            <span>Home Studio</span>
+            <span>Electronic</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2025 Yunhao Liang. All rights reserved.</p>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-img-wrap">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <img id="modalImg" src="" alt="Preview">
+    </div>
+  </div>
+
+  <script>
+    var overlay = document.getElementById('modalOverlay');
+    var modalImg = document.getElementById('modalImg');
+    var modalClose = document.getElementById('modalClose');
+
+    function openModal(src) {
+      modalImg.src = src;
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    modalClose.addEventListener('click', function() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
 </body>
 </html>

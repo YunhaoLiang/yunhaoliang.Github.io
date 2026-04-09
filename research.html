@@ -1,140 +1,468 @@
-<!DOCTYPE html>
-<html lang="zh">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research & Projects - Yunhao Liang</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research & Projects - Yunhao Liang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050507;
+      --bg-panel: #0a0a14;
+      --text: #f3efe8;
+      --text-muted: rgba(243,239,232,0.45);
+      --text-dim: rgba(243,239,232,0.10);
+      --red: #7a0f1f;
+      --red-bright: #c41230;
+      --gold: #b59b52;
+      --violet: #8b7cf6;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.15);
+      --radius: 20px;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--font-body); line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--red); color: var(--text); }
+
+    /* GRAIN */
+    .grain { position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.035; mix-blend-mode: overlay; }
+    .grain svg { width: 100%; height: 100%; }
+
+    /* ATMO */
+    .atmo { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: 0; }
+    .atmo-1 { width: 600px; height: 600px; top: -150px; right: -100px; background: radial-gradient(circle, rgba(122,15,31,0.22), transparent 70%); }
+    .atmo-2 { width: 500px; height: 500px; bottom: 20%; left: -150px; background: radial-gradient(circle, rgba(59,15,42,0.18), transparent 70%); }
+
+    /* NAV */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 48px;
+      background: rgba(5,5,7,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+    .nav-logo { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 6px; }
+    .nav-links a {
+      font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 2px; padding: 8px 20px;
+      border: 1px solid var(--border); border-radius: 30px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active { border-color: var(--border-hover); background: rgba(255,255,255,0.03); }
+
+    /* PAGE */
+    .page { max-width: 1400px; margin: 0 auto; padding: 160px 48px 120px; position: relative; z-index: 1; }
+    .bg-text {
+      position: absolute; font-family: var(--font-display);
+      font-size: clamp(6rem, 14vw, 13rem); color: var(--text-dim);
+      white-space: nowrap; pointer-events: none; user-select: none;
+      top: 80px; right: -30px;
+    }
+    .page-title {
+      font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 4px; margin-bottom: 16px; position: relative; z-index: 2;
+    }
+    .section-label {
+      font-family: var(--font-mono); font-size: 0.7rem;
+      text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted);
+      margin: 52px 0 18px; display: flex; align-items: center; gap: 14px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* FEATURED CARD (GOFM / LLM) */
+    .featured-card {
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      margin-bottom: 28px;
+      transition: border-color 0.35s, transform 0.35s;
+    }
+    .featured-card:hover { border-color: var(--border-hover); transform: translateY(-4px); }
+    .featured-visual {
+      width: 100%; max-height: 320px; overflow: hidden; position: relative;
+    }
+    .featured-visual img {
+      width: 100%; height: 100%; object-fit: cover;
+      opacity: 0.75; mix-blend-mode: lighten; display: block;
+      cursor: pointer; transition: transform 0.5s, opacity 0.3s;
+    }
+    .featured-visual img:hover { transform: scale(1.02); opacity: 0.9; }
+    .featured-visual-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10,10,20,0.95) 100%);
+      pointer-events: none;
+    }
+    .featured-body { padding: 32px 36px 36px; }
+    .feat-number { font-family: var(--font-display); font-size: 4rem; color: var(--text-dim); line-height: 1; margin-bottom: 8px; }
+    .feat-title { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2.4rem); letter-spacing: 2px; margin-bottom: 14px; line-height: 1.1; }
+    .feat-meta {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);
+      margin-bottom: 18px; line-height: 1.9;
+    }
+    .feat-meta a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+    .feat-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .feat-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 5px 12px; border: 1px solid var(--border); border-radius: 20px; color: var(--text-muted);
+    }
+    .feat-tag.highlight { border-color: var(--gold); color: var(--gold); background: rgba(181,155,82,0.06); }
+    .feat-desc { font-size: 0.93rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 18px; }
+    .feat-list { list-style: none; padding: 0; margin-bottom: 22px; }
+    .feat-list li {
+      font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;
+      padding-left: 18px; position: relative; margin-bottom: 5px;
+    }
+    .feat-list li::before {
+      content: ''; position: absolute; left: 0; top: 10px;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--gold); opacity: 0.7;
+    }
+    .feat-link {
+      display: inline-block; font-family: var(--font-mono); font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 2px;
+      padding: 10px 24px; border: 1px solid var(--border); border-radius: 30px;
+      color: var(--text-muted); transition: all 0.3s; margin-right: 10px; margin-top: 4px;
+    }
+    .feat-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* STATS ROW */
+    .stats-row { display: flex; flex-wrap: wrap; gap: 14px; margin: 22px 0; }
+    .stat-chip {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 18px; text-align: center; min-width: 110px;
+    }
+    .stat-chip .val { font-family: var(--font-display); font-size: 1.9rem; color: var(--gold); display: block; }
+    .stat-chip .lbl { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; font-family: var(--font-mono); letter-spacing: 1px; }
+
+    /* PAST PROJECT GRID */
+    .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .project-card {
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px 26px 30px;
+      transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+      display: flex; flex-direction: column;
+    }
+    .project-card:hover { border-color: var(--border-hover); transform: translateY(-5px); box-shadow: 0 18px 50px rgba(0,0,0,0.38); }
+    .proj-number { font-family: var(--font-display); font-size: 2.6rem; color: var(--text-dim); line-height: 1; margin-bottom: 10px; }
+    .proj-title { font-family: var(--font-display); font-size: 1.35rem; letter-spacing: 1px; margin-bottom: 10px; line-height: 1.2; }
+    .proj-meta {
+      font-family: var(--font-mono); font-size: 0.63rem;
+      text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted);
+      margin-bottom: 14px; line-height: 1.8;
+    }
+    .proj-meta a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .proj-tag {
+      font-family: var(--font-mono); font-size: 0.58rem;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 4px 10px; border: 1px solid var(--border); border-radius: 20px; color: var(--text-muted);
+    }
+    .proj-desc { font-size: 0.87rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 14px; }
+    .proj-list { list-style: none; padding: 0; margin-bottom: 18px; flex: 1; }
+    .proj-list li {
+      font-size: 0.84rem; color: var(--text-muted); line-height: 1.65;
+      padding-left: 16px; position: relative; margin-bottom: 4px;
+    }
+    .proj-list li::before {
+      content: ''; position: absolute; left: 0; top: 9px;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--gold); opacity: 0.6;
+    }
+    .proj-link {
+      display: inline-block; font-family: var(--font-mono); font-size: 0.68rem;
+      text-transform: uppercase; letter-spacing: 2px;
+      padding: 9px 20px; border: 1px solid var(--border); border-radius: 30px;
+      color: var(--text-muted); transition: all 0.3s; margin-top: auto;
+    }
+    .proj-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* IMAGE MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 5000;
+      background: rgba(5,5,7,0.94);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-img-wrap { position: relative; max-width: 900px; width: 92%; }
+    .modal-img-wrap img { width: 100%; border-radius: var(--radius); border: 1px solid var(--border); display: block; }
+    .modal-close {
+      position: absolute; top: -18px; right: -18px;
+      width: 44px; height: 44px;
+      border: 1px solid var(--border); border-radius: 50%;
+      background: var(--bg-panel); color: var(--text-muted);
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .modal-close:hover { border-color: var(--text); color: var(--text); }
+
+    /* FOOTER */
+    .footer {
+      padding: 40px 48px; text-align: center;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);
+      border-top: 1px solid var(--border); position: relative; z-index: 1;
+    }
+
+    @media (max-width: 1100px) { .project-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 860px) {
+      .page { padding: 120px 24px 80px; }
+      .nav { padding: 16px 24px; }
+      .nav-links a { padding: 6px 14px; font-size: 0.6rem; }
+      .project-grid { grid-template-columns: 1fr; }
+      .featured-body { padding: 24px 22px 28px; }
+    }
+    @media (max-width: 600px) { .nav-links { display: none; } }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="index.html">About</a>
-        <a href="education.html">Education</a>
-        <a href="research.html">Research & Projects</a>
-        <a href="experience.html">Work Experience</a>
-        <a href="interests.html">Beyond Research</a>
-    </nav>
 
-    <section id="research">
-        <h2>Research & Projects</h2>
+  <div class="grain">
+    <svg><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
+  </div>
+  <div class="atmo atmo-1"></div>
+  <div class="atmo atmo-2"></div>
 
-        <div class="research-section current">
-            <h3>🔬 Current Research</h3>
-            
-            <div class="project-grid">
-                <div class="project-card">
-                    <h4>Cooperative Multi-LLM Agents via Sequential Public Goods Games</h4>
-                    <div class="project-meta">
-                        <div class="institution">The University of Hong Kong</div>
-                        <div class="supervisor">Prof. Max Shen & Prof. Shaochong Lin</div>
-                        <div class="duration">May 2025 - Present</div>
-                        <div class="status">Under Review at AAAI 2026</div>
-                    </div>
-                    <p>Building a game-theoretic multi-agent framework to study cooperation among LLM-based agents:</p>
-                    <ul>
-                        <li>Sequential Public Goods Game with belief updating and conditional cooperation</li>
-                        <li>Subgame Perfect Nash Equilibrium analysis under full vs. partial observability</li>
-                        <li>Mechanism design for incentive alignment</li>
-                    </ul>
-                    <p>
-                        Preprint: <a href="http://arxiv.org/abs/2508.02076" target="_blank">arXiv:2508.02076</a>
-                    </p>
-                </div>
+  <nav class="nav">
+    <div class="nav-logo">YL</div>
+    <div class="nav-links">
+      <a href="index.html">About</a>
+      <a href="index.html#education">Education</a>
+      <a href="research.html" class="active">Research</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="interests.html">Beyond Research</a>
+    </div>
+  </nav>
 
-            </div>
+  <div class="page">
+    <div class="bg-text">RESEARCH</div>
+    <div class="page-title">RESEARCH &amp; PROJECTS</div>
+
+    <!-- ===== CURRENT RESEARCH ===== -->
+    <div class="section-label">Current Research</div>
+
+    <!-- GOFM -->
+    <div class="featured-card">
+      <div class="featured-visual">
+        <img src="images/gofm_architecture.png" alt="GOFM Architecture" onclick="openModal(this.src)">
+        <div class="featured-visual-gradient"></div>
+      </div>
+      <div class="featured-body">
+        <div class="feat-number">01</div>
+        <div class="feat-title">GRAPH OPTIMIZATION FOUNDATION MODEL (GOFM)</div>
+        <div class="feat-meta">
+          UC Berkeley &rarr; HKU &nbsp;&middot;&nbsp; Supervised by Prof. Zuo-Jun Max Shen<br>
+          Under Review &nbsp;&middot;&nbsp; Management Science &nbsp;&middot;&nbsp;
+          <a href="https://arxiv.org/abs/2509.24256" target="_blank">arXiv:2509.24256</a>
         </div>
-
-        <div class="research-section past">
-            <h3>💡 Past Projects</h3>
-            
-            <div class="project-grid">
-                <div class="project-card">
-                    <h4>UAV Path Planning</h4>
-                    <div class="project-meta">
-                        <div class="institution">UC Berkeley</div>
-                        <div class="supervisor">Prof. Mark W. Mueller</div>
-                        <div class="duration">Sep 2024 - May 2025</div>
-                    </div>
-                    <p>Optimizing UAV paths for agricultural data collection:</p>
-                    <ul>
-                        <li>DARP & MST algorithms</li>
-                        <li>Data transmission</li>
-                        <li>Automated decision-making</li>
-                    </ul>
-                    <button class="toggle-details" onclick="location.href='uav-project.html'">Learn More →</button>
-                </div>
-
-                <div class="project-card">
-                    <h4>Image-to-Text AI System</h4>
-                    <div class="project-meta">
-                        <div class="institution">Independent Project</div>
-                        <div class="duration">Feb 2025 - Mar 2025</div>
-                        <a href="https://github.com/YunhaoLiang/PictureToLatex--WechatMiniApp" target="_blank">GitHub →</a>
-                    </div>
-                    <p>Building a multimodal LLM pipeline to convert images (forms, handwriting) into structured text:</p>
-                    <ul>
-                        <li>Prompt engineering and fine-tuning for Pix2Text / Pix2Struct</li>
-                        <li>Mini Program interface; backend in progress</li>
-                        <li>Focus on accuracy and generalizability in unstructured data</li>
-                    </ul>
-                </div>
-
-                <div class="project-card">
-                    <h4>Smart City Innovation</h4>
-                    <div class="project-meta">
-                        <div class="institution">Chongqing University</div>
-                        <div class="duration">2023-2024</div>
-                    </div>
-                    <p>Analyzing Smart City Pilot Plan impact:</p>
-                    <ul>
-                        <li>Multi-period DID model</li>
-                        <li>296 cities study</li>
-                        <li>20-year data analysis</li>
-                    </ul>
-                    <a href="https://doi.org/10.3390/su16188007" target="_blank">Paper →</a>
-                </div>
-
-                <div class="project-card">
-                    <h4>Yin Music Platform</h4>
-                    <div class="project-meta">
-                        <div class="institution">Personal Project</div>
-                        <a href="https://github.com/YunhaoLiang/Yin-Music-Steaming-Platform" target="_blank">GitHub →</a>
-                    </div>
-                    <p>Full-stack music platform:</p>
-                    <ul>
-                        <li>Spring Boot backend</li>
-                        <li>Vue.js frontend</li>
-                        <li>MySQL optimization</li>
-                    </ul>
-                </div>
-
-                <div class="project-card">
-                    <h4>Blood Donation System</h4>
-                    <div class="project-meta">
-                        <div class="institution">University of Pittsburgh</div>
-                        <div class="supervisor">Prof. Bo Zeng</div>
-                    </div>
-                    <p>Hospital transfusion simulation:</p>
-                    <ul>
-                        <li>Simio modeling</li>
-                        <li>Kenyan hospitals study</li>
-                        <li>UPMC collaboration</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="feat-tags">
+          <span class="feat-tag highlight">Under Review</span>
+          <span class="feat-tag">Graph Optimization</span>
+          <span class="feat-tag">Foundation Model</span>
+          <span class="feat-tag">Operations Research</span>
         </div>
-    </section>
+        <p class="feat-desc">
+          A pretrain-transfer framework for graph optimization. GOFM internalizes network topology by encoding structure-aware random walks into a Transformer through progressive masked reconstruction. At inference, a single pretrained backbone facilitates SP, TSP, CVRP, Community Detection, and Influence Maximization via lightweight constrained decoding 鈥?no retraining required.
+        </p>
+        <div class="stats-row">
+          <div class="stat-chip"><span class="val">1,945</span><span class="lbl">Max nodes</span></div>
+          <div class="stat-chip"><span class="val">24.5%</span><span class="lbl">Distance reduction</span></div>
+          <div class="stat-chip"><span class="val">5</span><span class="lbl">Task families</span></div>
+          <div class="stat-chip"><span class="val">100脳</span><span class="lbl">vs LKH3 / OR-Tools</span></div>
+        </div>
+        <ul class="feat-list">
+          <li>Self-supervised pretraining on graph structure via structure-aware random walks</li>
+          <li>Supports SP, TSP, CVRP, Community Detection &amp; Influence Maximization</li>
+          <li>Amazon Last Mile real-world case study 鈥?24.5% distance reduction</li>
+          <li>Near-perfect feasibility on city-scale sparse networks</li>
+        </ul>
+        <img src="images/graph intelligence.png" alt="Graph Optimization Tasks" style="width:100%;border-radius:12px;border:1px solid var(--border);margin-bottom:20px;cursor:pointer;" onclick="openModal(this.src)">
+        <a class="feat-link" href="gofm-project.html">Full Project Page &rarr;</a>
+        <a class="feat-link" href="https://arxiv.org/abs/2509.24256" target="_blank">arXiv Paper &rarr;</a>
+      </div>
+    </div>
 
-    <footer>
-        <p>© 2025 Yunhao Liang. All rights reserved.</p>
-    </footer>
+    <!-- Multi-LLM Agents -->
+    <div class="featured-card">
+      <div class="featured-body" style="padding-top:36px;">
+        <div class="feat-number">02</div>
+        <div class="feat-title">COOPERATIVE MULTI-LLM AGENTS VIA SEQUENTIAL PUBLIC GOODS GAMES</div>
+        <div class="feat-meta">
+          The University of Hong Kong &nbsp;&middot;&nbsp; Prof. Max Shen &amp; Prof. Shaochong Lin<br>
+          May 2025 鈥?Present &nbsp;&middot;&nbsp; Under Review at AAAI 2026 &nbsp;&middot;&nbsp;
+          <a href="https://arxiv.org/abs/2508.02076" target="_blank">arXiv:2508.02076</a>
+        </div>
+        <div class="feat-tags">
+          <span class="feat-tag highlight">Under Review 路 AAAI 2026</span>
+          <span class="feat-tag">Multi-Agent Systems</span>
+          <span class="feat-tag">LLM</span>
+          <span class="feat-tag">Game Theory</span>
+        </div>
+        <p class="feat-desc">
+          Building a game-theoretic multi-agent framework to study cooperation among LLM-based agents.
+        </p>
+        <ul class="feat-list">
+          <li>Sequential Public Goods Game with belief updating and conditional cooperation</li>
+          <li>Subgame Perfect Nash Equilibrium analysis under full vs. partial observability</li>
+          <li>Mechanism design for incentive alignment</li>
+        </ul>
+        <a class="feat-link" href="https://arxiv.org/abs/2508.02076" target="_blank">Preprint &rarr;</a>
+      </div>
+    </div>
 
-    <script>
-        document.querySelector('.toggle-details').addEventListener('click', function() {
-            const details = this.parentElement;
-            details.classList.toggle('expanded');
-            this.textContent = details.classList.contains('expanded') ? 'Show Less' : 'View Details';
-        });
-    </script>
+    <!-- ===== PAST PROJECTS ===== -->
+    <div class="section-label" style="margin-top:60px;">Past Projects</div>
+
+    <div class="project-grid">
+
+      <div class="project-card">
+        <div class="proj-number">03</div>
+        <div class="proj-title">UAV PATH PLANNING</div>
+        <div class="proj-meta">
+          UC Berkeley &middot; Prof. Mark W. Mueller<br>Sep 2024 鈥?May 2025
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">Robotics</span>
+          <span class="proj-tag">Optimization</span>
+          <span class="proj-tag">IoT</span>
+        </div>
+        <p class="proj-desc">Optimizing UAV paths for agricultural data collection:</p>
+        <ul class="proj-list">
+          <li>DARP &amp; MST algorithms</li>
+          <li>Data transmission optimization</li>
+          <li>Automated decision-making</li>
+        </ul>
+        <a class="proj-link" href="uav-project.html">Learn More &rarr;</a>
+      </div>
+
+      <div class="project-card">
+        <div class="proj-number">04</div>
+        <div class="proj-title">IMAGE-TO-TEXT AI SYSTEM</div>
+        <div class="proj-meta">
+          Independent Project<br>Feb 2025 鈥?Mar 2025
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">Multimodal LLM</span>
+          <span class="proj-tag">Vision</span>
+        </div>
+        <p class="proj-desc">Building a multimodal LLM pipeline to convert images (forms, handwriting) into structured text:</p>
+        <ul class="proj-list">
+          <li>Prompt engineering and fine-tuning for Pix2Text / Pix2Struct</li>
+          <li>Mini Program interface; backend in progress</li>
+          <li>Focus on accuracy in unstructured data</li>
+        </ul>
+        <a class="proj-link" href="https://github.com/YunhaoLiang/PictureToLatex--WechatMiniApp" target="_blank">GitHub &rarr;</a>
+      </div>
+
+      <div class="project-card">
+        <div class="proj-number">05</div>
+        <div class="proj-title">SMART CITY INNOVATION</div>
+        <div class="proj-meta">
+          Chongqing University<br>2023 鈥?2024
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">Data Science</span>
+          <span class="proj-tag">Econometrics</span>
+          <span class="proj-tag">Published</span>
+        </div>
+        <p class="proj-desc">Analyzing Smart City Pilot Plan impact:</p>
+        <ul class="proj-list">
+          <li>Multi-period DID model</li>
+          <li>296 cities study</li>
+          <li>20-year data analysis</li>
+        </ul>
+        <a class="proj-link" href="https://doi.org/10.3390/su16188007" target="_blank">Paper &rarr;</a>
+      </div>
+
+      <div class="project-card">
+        <div class="proj-number">06</div>
+        <div class="proj-title">YIN MUSIC PLATFORM</div>
+        <div class="proj-meta">
+          Personal Project
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">Full-Stack</span>
+          <span class="proj-tag">Spring Boot</span>
+          <span class="proj-tag">Vue.js</span>
+        </div>
+        <p class="proj-desc">Full-stack music streaming platform:</p>
+        <ul class="proj-list">
+          <li>Spring Boot backend</li>
+          <li>Vue.js frontend</li>
+          <li>MySQL optimization</li>
+        </ul>
+        <a class="proj-link" href="https://github.com/YunhaoLiang/Yin-Music-Steaming-Platform" target="_blank">GitHub &rarr;</a>
+      </div>
+
+      <div class="project-card">
+        <div class="proj-number">07</div>
+        <div class="proj-title">BLOOD DONATION SYSTEM</div>
+        <div class="proj-meta">
+          University of Pittsburgh &middot; Prof. Bo Zeng
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">Simulation</span>
+          <span class="proj-tag">Healthcare OR</span>
+        </div>
+        <p class="proj-desc">Hospital transfusion simulation:</p>
+        <ul class="proj-list">
+          <li>Simio modeling</li>
+          <li>Kenyan hospitals study</li>
+          <li>UPMC collaboration</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2025 Yunhao Liang. All rights reserved.</p>
+  </footer>
+
+  <!-- IMAGE MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-img-wrap">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <img id="modalImg" src="" alt="Preview">
+    </div>
+  </div>
+
+  <script>
+    var overlay = document.getElementById('modalOverlay');
+    var modalImg = document.getElementById('modalImg');
+    var modalClose = document.getElementById('modalClose');
+
+    function openModal(src) {
+      modalImg.src = src;
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    modalClose.addEventListener('click', function() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) { overlay.classList.remove('active'); document.body.style.overflow = ''; }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { overlay.classList.remove('active'); document.body.style.overflow = ''; }
+    });
+  </script>
 </body>
-</html> 
+</html>

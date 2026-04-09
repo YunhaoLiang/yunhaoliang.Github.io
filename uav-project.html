@@ -1,93 +1,247 @@
-<!DOCTYPE html>
-<html lang="zh">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UAV Project - Yunhao Liang</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UAV Path Planning - Yunhao Liang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050507; --bg-panel: #0a0a14; --text: #f3efe8;
+      --text-muted: rgba(243,239,232,0.45); --text-dim: rgba(243,239,232,0.10);
+      --red: #7a0f1f; --red-bright: #c41230; --gold: #b59b52;
+      --border: rgba(255,255,255,0.06); --border-hover: rgba(255,255,255,0.15);
+      --radius: 20px;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--red); color: var(--text); }
+
+    .grain { position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.035; mix-blend-mode: overlay; }
+    .grain svg { width: 100%; height: 100%; }
+    .atmo { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: 0; }
+    .atmo-1 { width: 600px; height: 600px; top: -150px; right: -100px; background: radial-gradient(circle, rgba(122,15,31,0.22), transparent 70%); }
+    .atmo-2 { width: 500px; height: 500px; bottom: 20%; left: -150px; background: radial-gradient(circle, rgba(59,15,42,0.18), transparent 70%); }
+
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 48px;
+      background: rgba(5,5,7,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+    .nav-logo { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 6px; }
+    .nav-links a {
+      font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 2px; padding: 8px 20px;
+      border: 1px solid var(--border); border-radius: 30px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .nav-links a:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.03); }
+
+    .page { max-width: 760px; margin: 0 auto; padding: 110px 32px 80px; position: relative; z-index: 1; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 0.62rem;
+      text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);
+      margin-bottom: 32px; transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--text); }
+    .back-link::before { content: '\2190'; font-size: 0.9rem; }
+
+    .proj-hero { margin-bottom: 32px; }
+    .proj-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .proj-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: 2px; line-height: 1.0; margin-bottom: 12px;
+    }
+    .proj-hero-meta {
+      font-family: var(--font-mono); font-size: 0.62rem;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--text-muted); line-height: 1.9;
+    }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .proj-tag {
+      font-family: var(--font-mono); font-size: 0.55rem;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 4px 10px; border: 1px solid var(--border); border-radius: 20px; color: var(--text-muted);
+    }
+
+    .sec { margin-bottom: 36px; }
+    .sec-title {
+      font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 3px;
+      margin-bottom: 12px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sec p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 12px; }
+
+    .img-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 14px 0; }
+    .img-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 14px 0; }
+    .media-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; align-items: start; }
+
+    .proj-img {
+      width: 100%; height: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      display: block; cursor: pointer;
+      transition: opacity 0.3s, transform 0.3s;
+      background: var(--bg-panel);
+      min-height: 60px;
+    }
+    .proj-img:hover { opacity: 0.88; transform: scale(1.005); }
+
+    .proj-video {
+      width: 100%; border-radius: 10px;
+      border: 1px solid var(--border);
+      display: block; background: #000;
+    }
+
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 5000;
+      background: rgba(5,5,7,0.94);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-wrap { position: relative; max-width: 1100px; width: 94%; }
+    .modal-wrap img { width: 100%; border-radius: var(--radius); border: 1px solid var(--border); display: block; }
+    .modal-close {
+      position: absolute; top: -18px; right: -18px;
+      width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 50%;
+      background: var(--bg-panel); color: var(--text-muted); font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .modal-close:hover { border-color: var(--text); color: var(--text); }
+
+    .footer {
+      padding: 28px 32px; text-align: center;
+      font-family: var(--font-mono); font-size: 0.6rem;
+      text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);
+      border-top: 1px solid var(--border); position: relative; z-index: 1;
+    }
+
+    @media (max-width: 860px) {
+      .page { padding: 100px 20px 60px; }
+      .nav { padding: 16px 24px; }
+      .img-grid-3 { grid-template-columns: 1fr; }
+      .img-grid-2 { grid-template-columns: 1fr; }
+      .media-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) { .nav-links { display: none; } }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="index.html">About</a>
-        <a href="education.html">Education</a>
-        <a href="research.html">Research & Projects</a>
-        <a href="experience.html">Work Experience</a>
-        <a href="interests.html">Beyond Research</a>
-    </nav>
 
-    <section id="project-detail">
-        <div class="project-header">
-            <h2>UAV Path Planning</h2>
-            <div class="project-meta">
-                <span>UC Berkeley</span>
-                <span>With Prof. Mark W. Mueller</span>
-            </div>
-        </div>
+  <div class="grain">
+    <svg><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
+  </div>
+  <div class="atmo atmo-1"></div>
+  <div class="atmo atmo-2"></div>
 
-        <div class="project-sections">
-            <div class="section">
-                <h3>Path Planning</h3>
-                <p>Implementation of DARP and MST algorithms for optimal route planning.</p>
-                <div class="image-grid three-images">
-                    <img src="images/path1.png" alt="Path Planning 1" class="project-img">
-                    <img src="images/path2.png" alt="Path Planning 2" class="project-img">
-                    <img src="images/path3.png" alt="Path Planning 3" class="project-img">
-                </div>
-            </div>
+  <nav class="nav">
+    <div class="nav-logo">YL</div>
+    <div class="nav-links">
+      <a href="index.html">About</a>
+      <a href="index.html#education">Education</a>
+      <a href="research.html">Research</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="interests.html">Beyond Research</a>
+    </div>
+  </nav>
 
-            <div class="section">
-                <h3>Data Transmission & Sensors</h3>
-                <p>Testing ESP32 transmitter with simulated signals and implementing soil sensors for agricultural monitoring.</p>
-                <div class="image-grid two-images">
-                    <img src="images/data1.png" alt="ESP32 Transmitter Setup" class="project-img">
-                    <img src="images/data2.png" alt="Soil Sensors" class="project-img">
-                </div>
-            </div>
+  <div class="page">
+    <a class="back-link" href="research.html">Back to Research</a>
 
-            <div class="section">
-                <h3>Autonomous System</h3>
-                <p>Integration of sensor data with decision-making algorithms.</p>
-                <div class="media-content">
-                    <img src="images/auto.png" alt="Autonomous System" class="project-img">
-                    <video controls class="project-video">
-                        <source src="videos/autonomous.mov" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div id="imageModal" class="modal">
-        <span class="modal-close">&times;</span>
-        <img class="modal-content" id="modalImg">
+    <div class="proj-hero">
+      <div class="proj-label">UC Berkeley &middot; Prof. Mark W. Mueller &middot; Sep 2024 - May 2025</div>
+      <div class="proj-hero-title">UAV PATH PLANNING</div>
+      <div class="proj-hero-meta">Optimizing UAV paths for agricultural data collection</div>
+      <div class="proj-tags">
+        <span class="proj-tag">Robotics</span>
+        <span class="proj-tag">Optimization</span>
+        <span class="proj-tag">IoT</span>
+        <span class="proj-tag">DARP</span>
+        <span class="proj-tag">MST</span>
+      </div>
     </div>
 
-    <footer>
-        <p>© 2025 Yunhao Liang. All rights reserved.</p>
-    </footer>
+    <!-- Path Planning -->
+    <div class="sec">
+      <div class="sec-title">PATH PLANNING</div>
+      <p>Implementation of DARP and MST algorithms for optimal route planning.</p>
+      <div class="img-grid-3">
+        <img src="images/path1.png" alt="Path Planning 1" class="proj-img" onclick="openModal(this.src)">
+        <img src="images/path2.png" alt="Path Planning 2" class="proj-img" onclick="openModal(this.src)">
+        <img src="images/path3.png" alt="Path Planning 3" class="proj-img" onclick="openModal(this.src)">
+      </div>
+    </div>
 
-    <script>
-        var modal = document.getElementById("imageModal");
-        var modalImg = document.getElementById("modalImg");
-        var span = document.getElementsByClassName("modal-close")[0];
+    <!-- Data Transmission & Sensors -->
+    <div class="sec">
+      <div class="sec-title">DATA TRANSMISSION &amp; SENSORS</div>
+      <p>Testing ESP32 transmitter with simulated signals and implementing soil sensors for agricultural monitoring.</p>
+      <div class="img-grid-2">
+        <img src="images/data1.png" alt="ESP32 Transmitter Setup" class="proj-img" onclick="openModal(this.src)">
+        <img src="images/data2.png" alt="Soil Sensors" class="proj-img" onclick="openModal(this.src)">
+      </div>
+    </div>
 
-        document.querySelectorAll('.project-img').forEach(img => {
-            img.onclick = function() {
-                modal.style.display = "block";
-                modalImg.src = this.src;
-            }
-        });
+    <!-- Autonomous System -->
+    <div class="sec">
+      <div class="sec-title">AUTONOMOUS SYSTEM</div>
+      <p>Integration of sensor data with decision-making algorithms.</p>
+      <div class="media-row">
+        <img src="images/auto.png" alt="Autonomous System" class="proj-img" onclick="openModal(this.src)">
+        <video controls class="proj-video">
+          <source src="videos/autonomous.mov" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
 
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
+  <footer class="footer">
+    <p>&copy; 2025 Yunhao Liang. All rights reserved.</p>
+  </footer>
 
-        modal.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-wrap">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <img id="modalImg" src="" alt="Preview">
+    </div>
+  </div>
+
+  <script>
+    var overlay = document.getElementById('modalOverlay');
+    var modalImg = document.getElementById('modalImg');
+    document.getElementById('modalClose').addEventListener('click', function() {
+      overlay.classList.remove('active'); document.body.style.overflow = '';
+    });
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) { overlay.classList.remove('active'); document.body.style.overflow = ''; }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { overlay.classList.remove('active'); document.body.style.overflow = ''; }
+    });
+    function openModal(src) {
+      modalImg.src = src; overlay.classList.add('active'); document.body.style.overflow = 'hidden';
+    }
+  </script>
 </body>
-</html> 
+</html>

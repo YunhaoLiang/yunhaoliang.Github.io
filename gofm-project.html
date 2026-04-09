@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOFM — Yunhao Liang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050507; --bg-panel: #0a0a14; --text: #f3efe8;
+      --text-muted: rgba(243,239,232,0.45); --text-dim: rgba(243,239,232,0.10);
+      --red: #7a0f1f; --red-bright: #c41230; --gold: #b59b52;
+      --border: rgba(255,255,255,0.06); --border-hover: rgba(255,255,255,0.15);
+      --radius: 20px;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--red); color: var(--text); }
+
+    .grain { position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.035; mix-blend-mode: overlay; }
+    .grain svg { width: 100%; height: 100%; }
+    .atmo { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: 0; }
+    .atmo-1 { width: 600px; height: 600px; top: -150px; right: -100px; background: radial-gradient(circle, rgba(122,15,31,0.22), transparent 70%); }
+    .atmo-2 { width: 500px; height: 500px; bottom: 20%; left: -150px; background: radial-gradient(circle, rgba(59,15,42,0.18), transparent 70%); }
+
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 48px;
+      background: rgba(5,5,7,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+    .nav-logo { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 6px; }
+    .nav-links a {
+      font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 2px; padding: 8px 20px;
+      border: 1px solid var(--border); border-radius: 30px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .nav-links a:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.03); }
+
+    .page { max-width: 760px; margin: 0 auto; padding: 110px 32px 80px; position: relative; z-index: 1; }
+
+    /* BACK LINK */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 0.62rem;
+      text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);
+      margin-bottom: 32px; transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--text); }
+    .back-link::before { content: '←'; font-size: 0.9rem; }
+
+    /* HERO */
+    .proj-hero { margin-bottom: 32px; }
+    .proj-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .proj-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: 2px; line-height: 1.0;
+      margin-bottom: 12px;
+    }
+    .proj-hero-meta {
+      font-family: var(--font-mono); font-size: 0.62rem;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--text-muted); line-height: 1.9;
+    }
+    .proj-hero-meta a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .proj-tag {
+      font-family: var(--font-mono); font-size: 0.55rem;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 4px 10px; border: 1px solid var(--border); border-radius: 20px; color: var(--text-muted);
+    }
+    .proj-tag.hl { border-color: var(--gold); color: var(--gold); background: rgba(181,155,82,0.07); }
+
+    /* STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin: 24px 0; }
+    .stat-card {
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 10px; text-align: center;
+    }
+    .stat-card .val { font-family: var(--font-display); font-size: 1.7rem; color: var(--gold); display: block; line-height: 1; }
+    .stat-card .lbl { font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-muted); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* SECTION */
+    .sec { margin-bottom: 32px; }
+    .sec-title {
+      font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 3px;
+      margin-bottom: 12px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sec p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 10px; }
+    .sec p strong { color: var(--text); font-weight: 600; }
+
+    /* PAPER BOX */
+    .paper-box {
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 14px 14px 0;
+      padding: 16px 20px; margin-bottom: 0;
+    }
+    .paper-title { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.5; }
+    .paper-authors { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
+    .paper-authors em { color: var(--gold); font-style: normal; font-weight: 600; }
+    .paper-venue { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 12px; }
+    .paper-links { display: flex; gap: 8px; flex-wrap: wrap; }
+    .paper-link {
+      font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 1.5px; padding: 7px 16px;
+      border: 1px solid var(--border); border-radius: 30px; color: var(--text-muted);
+      transition: all 0.3s;
+    }
+    .paper-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* IMAGES */
+    .proj-img {
+      width: 100%; border-radius: 10px;
+      border: 1px solid var(--border);
+      display: block; margin: 14px 0;
+      cursor: pointer; transition: opacity 0.3s, transform 0.3s;
+    }
+    .proj-img:hover { opacity: 0.88; transform: scale(1.005); }
+    .fig-caption {
+      font-family: var(--font-mono); font-size: 0.58rem;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--text-muted); text-align: center;
+      margin-top: -8px; margin-bottom: 16px;
+      line-height: 1.7;
+    }
+
+    /* CONTRIBUTIONS */
+    .contrib-list { list-style: none; padding: 0; }
+    .contrib-list li {
+      font-size: 0.84rem; color: var(--text-muted); line-height: 1.75;
+      padding: 10px 0 10px 18px; position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .contrib-list li:last-child { border-bottom: none; }
+    .contrib-list li::before { content: '▸'; position: absolute; left: 0; color: var(--gold); }
+    .contrib-list li strong { color: var(--text); font-weight: 600; }
+
+    /* FOOTER */
+    .footer {
+      padding: 28px 32px; text-align: center;
+      font-family: var(--font-mono); font-size: 0.6rem;
+      text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);
+      border-top: 1px solid var(--border); position: relative; z-index: 1;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 5000;
+      background: rgba(5,5,7,0.94);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-wrap { position: relative; max-width: 1100px; width: 94%; }
+    .modal-wrap img { width: 100%; border-radius: var(--radius); border: 1px solid var(--border); display: block; }
+    .modal-close {
+      position: absolute; top: -18px; right: -18px;
+      width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 50%;
+      background: var(--bg-panel); color: var(--text-muted); font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .modal-close:hover { border-color: var(--text); color: var(--text); }
+
+    @media (max-width: 860px) {
+      .page { padding: 100px 20px 60px; }
+      .nav { padding: 16px 24px; }
+      .nav-links a { padding: 6px 14px; font-size: 0.6rem; }
+      .stats-row { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 600px) { .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+
+  <div class="grain">
+    <svg><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
+  </div>
+  <div class="atmo atmo-1"></div>
+  <div class="atmo atmo-2"></div>
+
+  <nav class="nav">
+    <div class="nav-logo">YL</div>
+    <div class="nav-links">
+      <a href="index.html">About</a>
+      <a href="index.html#education">Education</a>
+      <a href="research.html">Research</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="interests.html">Beyond Research</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <a class="back-link" href="research.html">Back to Research</a>
+
+    <!-- HERO -->
+    <div class="proj-hero">
+      <div class="proj-label">Current Research &middot; The University of Hong Kong</div>
+      <div class="proj-hero-title">GRAPH OPTIMIZATION<br>FOUNDATION MODEL</div>
+      <div class="proj-hero-meta">
+        HKU &amp; UC Berkeley &nbsp;&middot;&nbsp; Supervised by Prof. Zuo-Jun Max Shen<br>
+        Under Review &nbsp;&middot;&nbsp; Management Science
+      </div>
+      <div class="proj-tags">
+        <span class="proj-tag hl">Under Review · Management Science</span>
+        <span class="proj-tag">Graph Optimization</span>
+        <span class="proj-tag">Foundation Model</span>
+        <span class="proj-tag">Operations Research</span>
+        <span class="proj-tag">Transformer</span>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card"><span class="val">1,945</span><span class="lbl">Max network nodes</span></div>
+      <div class="stat-card"><span class="val">24.5%</span><span class="lbl">Distance reduction</span></div>
+      <div class="stat-card"><span class="val">5</span><span class="lbl">Task families</span></div>
+      <div class="stat-card"><span class="val">100×</span><span class="lbl">Faster than LKH3 / OR-Tools</span></div>
+    </div>
+
+    <!-- PAPER -->
+    <div class="sec">
+      <div class="sec-title">PAPER</div>
+      <div class="paper-box">
+        <div class="paper-title">Graph Foundation Models: Bridging Language Model Paradigms and Graph Optimization</div>
+        <div class="paper-authors"><em>Yunhao Liang</em>, Pujun Zhang, Yuan Qu, Shaochong Lin, Zuo-Jun Max Shen</div>
+        <div class="paper-venue">Under Review at Management Science</div>
+        <div class="paper-links">
+          <a class="paper-link" href="https://arxiv.org/abs/2509.24256" target="_blank">arXiv:2509.24256 &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="sec">
+      <div class="sec-title">OVERVIEW</div>
+      <p>Graph optimization is foundational to modern operations — routing vehicles through road networks, detecting communities in social networks, and influence-based targeting. Yet prevailing approaches treat each task instance in isolation, discarding persistent topological knowledge embedded in the underlying network.</p>
+      <p>GOFM shifts the focus from task-specific solvers to a task-agnostic structural prior. It internalizes network topology and distance geometry by encoding structure-aware random walks into a Transformer through progressive masked reconstruction. At inference, this learned prior facilitates diverse optimization tasks via lightweight constrained decoding, ensuring strict feasibility without retraining.</p>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="sec">
+      <div class="sec-title">FRAMEWORK ARCHITECTURE</div>
+      <p>The GOFM framework consists of three stages:</p>
+      <img src="images/gofm_architecture.png" alt="GOFM Framework Architecture" class="proj-img" onclick="openModal(this.src)">
+      <div class="fig-caption">
+        Stage I: Structure-aware random path generation via Multinomial Logit sampling &nbsp;&middot;&nbsp;
+        Stage II: Transformer pretraining with multi-target masked reconstruction &nbsp;&middot;&nbsp;
+        Stage III: Task-based guided decoding to feasible solutions
+      </div>
+    </div>
+
+    <!-- SUPPORTED TASKS -->
+    <div class="sec">
+      <div class="sec-title">SUPPORTED GRAPH OPTIMIZATION TASKS</div>
+      <p>GOFM handles five classical problem classes with a single pretrained backbone:</p>
+      <img src="images/graph intelligence.png" alt="Graph Optimization Tasks" class="proj-img" onclick="openModal(this.src)">
+      <div class="fig-caption">
+        Shortest Path (SP) &nbsp;&middot;&nbsp; Traveling Salesman Problem (TSP) &nbsp;&middot;&nbsp;
+        Capacitated Vehicle Routing Problem (CVRP) &nbsp;&middot;&nbsp;
+        Community Detection (CD) &nbsp;&middot;&nbsp; Influence Maximization (IM)
+      </div>
+    </div>
+
+    <!-- CONTRIBUTIONS -->
+    <div class="sec">
+      <div class="sec-title">KEY CONTRIBUTIONS</div>
+      <ul class="contrib-list">
+        <li><strong>Foundation-model framework for graph optimization:</strong> A single pretrained model performs well across multiple NP-hard graph tasks on real sparse networks, without any architectural changes.</li>
+        <li><strong>Self-supervised pretraining via structure-aware walks:</strong> Structure-aware random walks combined with progressive masked reconstruction equip the model with a holistic structural prior over the target graph.</li>
+        <li><strong>Cross-task reuse on real networks:</strong> Validated on networks up to 1,945 nodes across five routing families; generalizes beyond routing to community detection and influence maximization.</li>
+      </ul>
+    </div>
+
+    <!-- KEY RESULTS -->
+    <div class="sec">
+      <div class="sec-title">KEY RESULTS</div>
+      <p>GOFM achieves competitive solution quality compared to widely used OR solvers such as LKH3 and Google OR-Tools, with inference <strong>one to two orders of magnitude faster</strong> on city-scale graphs. Unlike neural baselines trained on complete-graph distributions, GOFM maintains <strong>near-perfect feasibility</strong> across all settings.</p>
+      <p>On the Amazon Last Mile dataset, GOFM delivers a <strong>24.5% reduction in total route distance</strong> — a direct impact on real-world logistics operations.</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2025 Yunhao Liang. All rights reserved.</p>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-wrap">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <img id="modalImg" src="" alt="Preview">
+    </div>
+  </div>
+
+  <script>
+    var overlay = document.getElementById('modalOverlay');
+    var modalImg = document.getElementById('modalImg');
+    document.getElementById('modalClose').addEventListener('click', function() {
+      overlay.classList.remove('active'); document.body.style.overflow = '';
+    });
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) { overlay.classList.remove('active'); document.body.style.overflow = ''; }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { overlay.classList.remove('active'); document.body.style.overflow = ''; }
+    });
+    function openModal(src) {
+      modalImg.src = src; overlay.classList.add('active'); document.body.style.overflow = 'hidden';
+    }
+  </script>
+</body>
+</html>

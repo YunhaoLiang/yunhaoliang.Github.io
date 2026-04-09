@@ -1,55 +1,1562 @@
-<!DOCTYPE html>
-<html lang="zh">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Yunhao Liang</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Louis Liang | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050507;
+      --bg-panel: #0a0a14;
+      --text: #f3efe8;
+      --text-muted: rgba(243,239,232,0.45);
+      --text-dim: rgba(243,239,232,0.10);
+      --red: #7a0f1f;
+      --red-bright: #c41230;
+      --wine: #3b0f2a;
+      --gold: #b59b52;
+      --violet: #8b7cf6;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.15);
+      --radius: 20px;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+      --font-hand: 'Caveat', cursive;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: var(--red); color: var(--text); }
+    a { color: inherit; text-decoration: none; }
+
+    /* ---- GRAIN OVERLAY ---- */
+    .grain {
+      position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none; opacity: 0.035; mix-blend-mode: overlay;
+    }
+    .grain svg { width: 100%; height: 100%; }
+
+    /* ---- ATMOSPHERIC GLOWS ---- */
+    .atmo {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; filter: blur(120px); z-index: 0;
+    }
+    .atmo-1 { width: 600px; height: 600px; top: -150px; right: -100px; background: radial-gradient(circle, rgba(122,15,31,0.25), transparent 70%); }
+    .atmo-2 { width: 500px; height: 500px; bottom: 30%; left: -150px; background: radial-gradient(circle, rgba(59,15,42,0.2), transparent 70%); }
+    .atmo-3 { width: 400px; height: 400px; bottom: -100px; right: 10%; background: radial-gradient(circle, rgba(139,124,246,0.08), transparent 70%); }
+
+    /* ---- NAVIGATION ---- */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 48px;
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+    .nav.scrolled {
+      background: rgba(5,5,7,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+    .nav-logo { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 6px; }
+    .nav-links a {
+      font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 2px; padding: 8px 20px;
+      border: 1px solid var(--border); border-radius: 30px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .nav-links a:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.03); }
+
+    /* ---- SECTIONS COMMON ---- */
+    .section {
+      position: relative; min-height: 100vh;
+      padding: 160px 48px 120px; z-index: 1;
+    }
+    .section-inner { max-width: 1400px; margin: 0 auto; position: relative; }
+    .bg-text {
+      position: absolute; font-family: var(--font-display);
+      font-size: clamp(6rem, 15vw, 14rem); color: var(--text-dim);
+      white-space: nowrap; pointer-events: none; user-select: none; z-index: 0;
+    }
+    .label {
+      font-family: var(--font-mono); font-size: 0.7rem;
+      text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted);
+    }
+
+    /* ---- HERO ---- */
+    #hero {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding-top: 80px;
+      perspective: 1200px;
+    }
+    #hero .bg-text {
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: clamp(8rem, 22vw, 24rem);
+      opacity: 0.035;
+    }
+    .hero-center {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 36px;
+      position: relative; z-index: 2;
+    }
+
+    /* ---- NAME STICKER ---- */
+    .name-sticker {
+      position: relative;
+      width: 620px; max-width: 92vw;
+      transform: rotate(-2deg);
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transform-origin: 100% 100%;
+      transition: transform 0.9s cubic-bezier(0.4,0,0.15,1), opacity 0.7s;
+      box-shadow:
+        0 8px 40px rgba(0,0,0,0.5),
+        0 2px 8px rgba(0,0,0,0.3);
+      will-change: transform, opacity;
+    }
+    .name-sticker:hover { transform: rotate(-1.5deg) scale(1.02); }
+    .name-sticker.peeling { pointer-events: none; }
+    .name-sticker.peeled {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+    .sticker-top {
+      background: linear-gradient(135deg, var(--red-bright), #a0102a);
+      padding: 22px 40px 14px;
+      border-radius: 14px 14px 0 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .sticker-top::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 4px 4px;
+      pointer-events: none;
+    }
+    .sticker-hello {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: 10px; display: block;
+    }
+    .sticker-mynameis {
+      font-family: var(--font-hand);
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      opacity: 0.9; display: block; margin-top: -2px;
+    }
+    .sticker-bottom {
+      background: var(--bg-panel);
+      padding: 28px 40px 36px;
+      border-radius: 0 0 14px 14px;
+      text-align: center;
+      border: 1px solid var(--border); border-top: none;
+      position: relative;
+    }
+    .sticker-name {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 8vw, 5.5rem);
+      letter-spacing: 8px;
+      line-height: 1;
+    }
+    .sticker-corner {
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 45px; height: 45px;
+      background: linear-gradient(225deg, var(--bg) 48%, rgba(243,239,232,0.06) 48%);
+      border-radius: 0 0 14px 0;
+      transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+      transform-origin: 100% 100%;
+      box-shadow: -6px -6px 16px rgba(0,0,0,0.32);
+    }
+    .name-sticker:hover .sticker-corner {
+      width: 60px; height: 60px;
+    }
+    .name-sticker.peeling .sticker-corner {
+      width: 128px; height: 128px;
+      transform: rotate(-18deg) translate(20px, 20px);
+      background: linear-gradient(225deg, rgba(10,10,14,0.95) 42%, rgba(243,239,232,0.22) 42%);
+    }
+
+    .hero-meta {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      text-align: center;
+    }
+    .hero-role {
+      font-size: 0.95rem; color: var(--text-muted); line-height: 1.7;
+    }
+    .hero-role strong { color: var(--text); font-weight: 600; }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      z-index: 2;
+    }
+    .scroll-hint span {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted);
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--text-muted), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* ---- ABOUT ---- */
+    #about { overflow: hidden; }
+    #about .bg-text { top: 40px; right: -40px; transform: rotate(-2deg); }
+    .about-layout {
+      display: flex; gap: 80px; align-items: center;
+      position: relative; z-index: 2;
+    }
+    .about-left {
+      flex: 0 0 44%; display: flex; justify-content: center;
+      align-items: center; position: relative; min-height: 480px;
+    }
+    .starburst { position: absolute; width: 400px; height: 400px; }
+    .starburst-inner { fill: var(--gold); opacity: 0.65; }
+    .halftone-overlay {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(0,0,0,0.35) 1px, transparent 1px);
+      background-size: 5px 5px; border-radius: 50%; mix-blend-mode: multiply;
+    }
+    .spider-symbol {
+      position: relative; z-index: 2;
+      width: min(360px, 82%);
+      height: auto;
+      object-fit: contain;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+    .spider-symbol:hover {
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5)) drop-shadow(0 0 10px rgba(255,255,255,0.12));
+      transform: scale(1.04);
+    }
+    .spider-symbol.lit {
+      filter:
+        drop-shadow(0 0 22px rgba(196,18,48,1))
+        drop-shadow(0 0 50px rgba(196,18,48,0.6))
+        drop-shadow(0 0 85px rgba(181,155,82,0.35))
+        brightness(1.18);
+      transform: scale(1.08);
+      animation: spiderGlow 1.6s ease-in-out infinite alternate;
+    }
+    @keyframes spiderGlow {
+      from {
+        filter:
+          drop-shadow(0 0 22px rgba(196,18,48,1))
+          drop-shadow(0 0 50px rgba(196,18,48,0.6))
+          drop-shadow(0 0 85px rgba(181,155,82,0.35))
+          brightness(1.18);
+        transform: scale(1.08);
+      }
+      to {
+        filter:
+          drop-shadow(0 0 32px rgba(196,18,48,1))
+          drop-shadow(0 0 70px rgba(196,18,48,0.75))
+          drop-shadow(0 0 110px rgba(181,155,82,0.45))
+          brightness(1.28);
+        transform: scale(1.12);
+      }
+    }
+    .spider-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 80px; height: 80px;
+      margin: -40px 0 0 -40px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      border: 2.5px solid rgba(196,18,48,0.85);
+    }
+    .spider-ring2 {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 80px; height: 80px;
+      margin: -40px 0 0 -40px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      border: 1.5px solid rgba(181,155,82,0.6);
+    }
+    .about-right { flex: 1; }
+
+    .spider-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 40px; position: relative; overflow: hidden;
+    }
+    .spider-panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    }
+    .panel-title {
+      font-family: var(--font-display); font-size: 2rem;
+      letter-spacing: 3px; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .panel-title .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--red-bright);
+      box-shadow: 0 0 12px var(--red-bright);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+    @keyframes dotPulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 12px var(--red-bright); }
+      50% { opacity: 0.6; box-shadow: 0 0 20px var(--red-bright); }
+    }
+    .answer-area {
+      font-size: 0.95rem; line-height: 1.8;
+      color: rgba(243,239,232,0.75);
+      min-height: 120px; margin-bottom: 28px;
+      transition: opacity 0.3s;
+    }
+    .preset-questions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .preset-btn {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 10px 18px; background: transparent;
+      border: 1px solid var(--border); border-radius: 30px;
+      color: var(--text-muted); cursor: pointer; transition: all 0.3s;
+    }
+    .preset-btn:hover, .preset-btn.active {
+      border-color: var(--gold); color: var(--gold);
+      background: rgba(181,155,82,0.06);
+    }
+    .ask-row { display: flex; gap: 10px; }
+    .ask-input {
+      flex: 1; background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border); border-radius: 30px;
+      padding: 12px 20px; font-family: var(--font-body);
+      font-size: 0.85rem; color: var(--text); outline: none;
+      transition: border-color 0.3s;
+    }
+    .ask-input::placeholder { color: var(--text-muted); }
+    .ask-input:focus { border-color: var(--border-hover); }
+    .ask-btn {
+      font-family: var(--font-display); font-size: 1rem;
+      letter-spacing: 2px; padding: 12px 28px;
+      background: var(--red-bright); border: none; border-radius: 30px;
+      color: var(--text); cursor: pointer; transition: all 0.3s; white-space: nowrap;
+    }
+    .ask-btn:hover { background: #d41535; transform: scale(1.03); }
+    .ask-btn:active { transform: scale(0.97); }
+
+    /* ---- SKILLS ---- */
+    #skills {
+      overflow: hidden;
+    }
+    #skills .bg-text { top: 60px; left: -20px; }
+    #skills::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(139,124,246,0.22), transparent 42%),
+        radial-gradient(circle at 50% 50%, rgba(196,18,48,0.14), transparent 62%);
+      z-index: 0; pointer-events: none;
+    }
+    .web-outer {
+      position: relative;
+      width: 720px; height: 720px;
+      margin: 0 auto;
+      z-index: 2;
+    }
+    .web-container {
+      position: relative;
+      width: 100%; height: 100%;
+    }
+    .web-svg {
+      width: 100%; height: 100%;
+      filter:
+        drop-shadow(0 0 32px rgba(255,255,255,0.28))
+        drop-shadow(0 0 80px rgba(139,124,246,0.24));
+      opacity: 0.97;
+    }
+    .web-core-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 320px; height: 320px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, rgba(181,155,82,0.1) 35%, transparent 65%);
+      pointer-events: none; z-index: 1; mix-blend-mode: screen;
+    }
+    .skill-node {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-mono); font-size: 0.68rem;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 9px 16px;
+      background: linear-gradient(145deg, rgba(18,18,30,0.96), rgba(8,8,14,0.93));
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
+      color: var(--text-muted); white-space: nowrap;
+      cursor: default; transition: all 0.3s; z-index: 10;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07);
+      backdrop-filter: blur(6px);
+    }
+    .skill-node-inner { display: inline-flex; align-items: center; gap: 8px; }
+    .skill-logo {
+      width: 16px; height: 16px; display: block; object-fit: contain;
+      filter: brightness(1.05);
+    }
+    .skill-logo-fallback {
+      width: 16px; height: 16px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.52rem; font-weight: 700;
+      background: rgba(255,255,255,0.1); color: var(--text);
+    }
+    .skill-node:hover {
+      color: var(--text); border-color: var(--gold);
+      background: linear-gradient(145deg, rgba(40,32,18,0.96), rgba(16,12,6,0.96));
+      transform: translate(-50%, -50%) scale(1.2);
+      box-shadow: 0 0 38px rgba(181,155,82,0.4), 0 12px 30px rgba(0,0,0,0.5);
+      z-index: 20;
+    }
+    .skill-node.highlight { border-color: var(--gold); color: var(--gold); background: linear-gradient(145deg, rgba(30,24,10,0.96), rgba(12,10,4,0.96)); }
+    .web-center-label {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-display); font-size: 2.2rem;
+      letter-spacing: 8px; color: rgba(243,239,232,0.92);
+      z-index: 5; pointer-events: none;
+      text-shadow: 0 0 20px rgba(255,255,255,0.3), 0 0 40px rgba(139,124,246,0.36);
+    }
+
+    /* ---- PROJECTS ---- */
+    #projects { overflow: hidden; }
+    #projects .bg-text { top: 30px; right: -60px; }
+    .projects-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 4px; margin-bottom: 60px;
+    }
+    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    .project-card {
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 0;
+      cursor: pointer; transition: all 0.5s cubic-bezier(0.22,1,0.36,1);
+      position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), transparent 60%);
+      opacity: 0; transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    .project-card:hover {
+      border-color: var(--border-hover); transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .project-card:hover::before { opacity: 1; }
+    .card-visual {
+      height: 100px; position: relative; overflow: hidden;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .card-visual img {
+      width: 100%; height: 100%; object-fit: cover;
+      opacity: 0.2; mix-blend-mode: lighten;
+    }
+    .card-visual .card-gradient {
+      position: absolute; inset: 0;
+    }
+    .card-body { padding: 30px 30px 32px; }
+    .card-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 14px; }
+    .card-number {
+      font-family: var(--font-display); font-size: 3rem;
+      color: var(--text-dim); line-height: 1; flex-shrink: 0;
+    }
+    .card-title {
+      font-family: var(--font-display); font-size: 1.5rem;
+      letter-spacing: 1px; line-height: 1.15;
+    }
+    .card-meta {
+      font-family: var(--font-mono); font-size: 0.65rem;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--text-muted); margin-bottom: 12px; opacity: 0.7;
+    }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .card-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 4px 10px; border: 1px solid var(--border);
+      border-radius: 20px; color: var(--text-muted);
+    }
+    .card-desc { font-size: 0.85rem; line-height: 1.7; color: var(--text-muted); margin-bottom: 6px; }
+    .card-list {
+      list-style: none; padding: 0; margin: 0 0 16px;
+    }
+    .card-list li {
+      font-size: 0.82rem; color: var(--text-muted); line-height: 1.65;
+      padding-left: 16px; position: relative; margin-bottom: 3px;
+    }
+    .card-list li::before {
+      content: ''; position: absolute; left: 0; top: 9px;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--gold); opacity: 0.6;
+    }
+    .card-arrow {
+      margin-top: 16px; font-family: var(--font-mono);
+      font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 2px; color: var(--text-muted); transition: color 0.3s;
+    }
+    .project-card:hover .card-arrow { color: var(--gold); }
+
+    /* ---- EDUCATION ---- */
+    #education { overflow: hidden; }
+    #education .bg-text { top: 20px; left: -40px; }
+    .education-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 4px; margin-bottom: 36px;
+    }
+    .education-grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .education-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 30px;
+      transition: all 0.35s;
+    }
+    .education-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+    }
+    .education-school {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .education-desc {
+      color: var(--text-muted);
+      font-size: 0.94rem;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .education-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(243,239,232,0.72);
+      margin-bottom: 10px;
+    }
+    .course-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .course-tags span {
+      font-family: var(--font-mono); font-size: 0.62rem;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 6px 10px; border: 1px solid var(--border);
+      border-radius: 14px; color: var(--text-muted);
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* ---- EXPERIENCE ---- */
+    #experience { overflow: hidden; }
+    #experience .bg-text { top: 30px; right: -40px; }
+    .experience-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 4px; margin-bottom: 36px;
+    }
+    .experience-grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .experience-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 30px;
+      transition: all 0.35s;
+    }
+    .experience-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+    }
+    .exp-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 16px; margin-bottom: 8px;
+    }
+    .exp-company {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      letter-spacing: 1.5px;
+      line-height: 1;
+    }
+    .exp-duration {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .exp-role {
+      color: rgba(243,239,232,0.85);
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+    }
+    .exp-description {
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 0.92rem;
+      margin-bottom: 14px;
+    }
+    .exp-highlight {
+      border-left: 2px solid var(--gold);
+      padding-left: 12px;
+      color: rgba(243,239,232,0.9);
+      font-size: 0.88rem;
+    }
+
+    /* ---- PROJECT DETAIL OVERLAY ---- */
+    .detail-overlay {
+      position: fixed; inset: 0; z-index: 2000;
+      display: none; align-items: center; justify-content: center;
+    }
+    .detail-overlay.active { display: flex; }
+    .detail-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(5,5,7,0.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+    .detail-content {
+      position: relative; z-index: 1;
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: var(--radius);
+      max-width: 900px; width: 90%; max-height: 85vh;
+      overflow-y: auto; padding: 50px;
+      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+    .detail-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 44px; height: 44px;
+      border: 1px solid var(--border); border-radius: 50%;
+      background: transparent; color: var(--text-muted);
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s; z-index: 5;
+    }
+    .detail-close:hover { border-color: var(--text); color: var(--text); }
+    .detail-number { font-family: var(--font-display); font-size: 5rem; color: var(--text-dim); line-height: 1; }
+    .detail-title { font-family: var(--font-display); font-size: 2.8rem; letter-spacing: 2px; margin: 8px 0 16px; }
+    .detail-meta {
+      font-family: var(--font-mono); font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--text-muted); margin-bottom: 30px;
+    }
+    .detail-body { font-size: 0.95rem; line-height: 1.9; color: rgba(243,239,232,0.75); }
+    .detail-body p { margin-bottom: 16px; }
+    .detail-body img { width: 100%; border-radius: 12px; margin: 20px 0; border: 1px solid var(--border); }
+    .detail-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 30px 0; }
+    .detail-stat {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; text-align: center;
+    }
+    .detail-stat .val { font-family: var(--font-display); font-size: 2.2rem; color: var(--gold); display: block; }
+    .detail-stat .lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
+    .detail-links { display: flex; gap: 10px; margin-top: 30px; }
+    .detail-link {
+      font-family: var(--font-mono); font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 10px 22px; border: 1px solid var(--border);
+      border-radius: 30px; color: var(--text-muted); transition: all 0.3s;
+    }
+    .detail-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ---- CONTACT ---- */
+    #contact { overflow: hidden; }
+    #contact .bg-text { bottom: 40px; left: -40px; transform: rotate(3deg); }
+    .contact-layout {
+      display: flex; gap: 80px; align-items: center;
+      position: relative; z-index: 2;
+    }
+    .contact-left { flex: 1; }
+    .slogan-line {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 1.05; letter-spacing: 2px;
+    }
+    .slogan-line.accent { color: var(--gold); }
+    .contact-right { flex: 0 0 420px; position: relative; }
+    .collage-title { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 30px; justify-content: center; }
+    .collage-letter {
+      font-family: var(--font-display); font-size: 2.2rem;
+      padding: 4px 8px; display: inline-block; line-height: 1;
+    }
+    .megaphone-svg { display: block; margin: 0 auto 30px; opacity: 0.25; }
+    .contact-desc {
+      font-size: 0.9rem; color: var(--text-muted);
+      text-align: center; margin-bottom: 28px; line-height: 1.7;
+    }
+    .contact-buttons { display: flex; flex-direction: column; gap: 10px; }
+    .contact-btn {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 24px; background: var(--bg-panel);
+      border: 1px solid var(--border); border-radius: 14px;
+      font-family: var(--font-mono); font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--text-muted); transition: all 0.3s;
+    }
+    .contact-btn:hover {
+      border-color: var(--border-hover); color: var(--text); transform: translateX(6px);
+    }
+    .contact-btn svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.5; }
+    .contact-btn:hover svg { opacity: 1; }
+
+    /* ---- FOOTER ---- */
+    .footer {
+      padding: 40px 48px; text-align: center;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);
+      border-top: 1px solid var(--border); position: relative; z-index: 1;
+    }
+
+    /* ---- REVEAL ---- */
+    /* Initial state handled by GSAP; CSS fallback keeps content visible if JS fails */
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 1100px) {
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .section { padding: 120px 24px 80px; }
+      .nav { padding: 16px 24px; }
+      .nav-links a { padding: 6px 14px; font-size: 0.6rem; }
+      .about-layout { flex-direction: column; gap: 40px; }
+      .about-left { flex: auto; min-height: 350px; }
+      .exp-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .contact-layout { flex-direction: column; gap: 50px; }
+      .contact-right { flex: auto; width: 100%; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .slogan-line { font-size: 2.4rem; }
+      .name-sticker { width: 95vw; }
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="index.html">About</a>
-        <a href="education.html">Education</a>
-        <a href="research.html">Research & Projects</a>
-        <a href="experience.html">Work Experience</a>
-        <a href="interests.html">Beyond Research</a>
-    </nav>
 
-    <div class="welcome-text">Welcome to my personal website!</div>
+  <!-- GRAIN -->
+  <div class="grain">
+    <svg><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>
+  </div>
 
-    <section id="about">
-        <div class="profile-container">
-            <div class="profile-image">
-                <img src="images/profile.jpg" alt="Yunhao Liang">
-            </div>
-            <div class="profile-text">
-                <h1>Yunhao Liang</h1>
-                <p class="about-description">
-                    I am a master student of Industrial Engineering and Operations Research (IEOR) at UC Berkeley. My current research interests center on 
-                    <strong>Multi-LLM agent cooperation and mechanism design, Unmanned Aerial Vehicle Routing Problem, and Operations Research for supply chain and healthcare</strong>. I'm particularly interested in how optimization and learning 
-                    algorithms can improve industrial efficiency and solve real-world logistics challenges.
-                </p>
-                
-                <p class="about-description">
-                    Currently, I work as a Research Assistant at The University of Hong Kong with Prof. Max Shen and Prof. Shaochong Lin, focusing on Large Language Models in Operations Research <strong>(LLM in OR)</strong>.
-                </p>
-                
-                <p class="about-description">
-                    I am fluent in English and Chinese (Mandarin), with conversational Japanese skills. Outside of academics, I enjoy maintaining an active lifestyle through regular gym workouts and music production in my home studio.
-                </p>
-            </div>
+  <div class="atmo atmo-1"></div>
+  <div class="atmo atmo-2"></div>
+  <div class="atmo atmo-3"></div>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <div class="nav-logo">LL</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="research.html">Research</a>
+      <a href="#education">Education</a>
+      <a href="#experience">Experience</a>
+      <a href="interests.html">Beyond Research</a>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="section" id="hero">
+    <div class="section-inner">
+      <div class="bg-text" id="heroBg">LOUIS</div>
+      <div class="hero-center">
+        <div class="name-sticker" id="nameSticker">
+          <div class="sticker-top">
+            <span class="sticker-hello">HELLO</span>
+            <span class="sticker-mynameis">my name is</span>
+          </div>
+          <div class="sticker-bottom">
+            <span class="sticker-name">LOUIS LIANG</span>
+          </div>
+          <div class="sticker-corner"></div>
         </div>
-    </section>
+        <div class="hero-meta">
+          <p class="hero-role">
+            <strong>Research Assistant @ HKU</strong><br>
+            Incoming PhD &middot; Data &amp; System Engineering &middot; Sept 2026
+          </p>
+          <div class="label" style="margin-top:8px;">AI &times; OR &middot; Supervised by Prof. Zuo-Jun Max Shen</div>
+        </div>
+      </div>
+      <div class="scroll-hint">
+        <span>Click sticker or scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </div>
+  </section>
 
-    <section id="contact">
-        <h2>Contact Me</h2>
-        <p>Email: <a href="mailto:yunhao_liang@berkeley.edu">yunhao_liang@berkeley.edu</a></p>
-        <p>GitHub: <a href="https://github.com/YunhaoLiang" target="_blank">YunhaoLiang</a></p>
-        <p>LinkedIn: <a href="https://www.linkedin.com/in/yunhao-liang-a06596237/" target="_blank">Yunhao Liang</a></p>
-    </section>
+  <!-- ==================== ABOUT ==================== -->
+  <section class="section" id="about">
+    <div class="section-inner">
+      <div class="bg-text">ABOUT</div>
+      <div class="about-layout">
+        <div class="about-left reveal">
 
-    <footer>
-        <p>© 2025 Yunhao Liang. All rights reserved.</p>
-    </footer>
+          <img class="spider-symbol" id="spiderSymbol" src="images/spider-ask.png" alt="Spider symbol">
+          <div class="spider-ring" id="ring1"></div>
+          <div class="spider-ring2" id="ring2"></div>
+        </div>
+
+        <div class="about-right reveal">
+          <div class="spider-panel">
+            <div class="panel-title"><span class="dot"></span> ASK THE SPIDER</div>
+            <div class="answer-area" id="answerArea">
+              I'm Yunhao Liang. Currently a Research Assistant at HKU, starting my PhD in Data &amp; System Engineering this September under Prof. Zuo-Jun Max Shen. I find the path &mdash; both in Artificial Intelligence and Operation Research.
+            </div>
+            <div class="preset-questions">
+              <button class="preset-btn" data-q="0">Research Focus</button>
+              <button class="preset-btn" data-q="1">Tech Arsenal</button>
+              <button class="preset-btn" data-q="2">Beyond Code</button>
+            </div>
+            <div class="ask-row">
+              <input type="text" class="ask-input" id="askInput" placeholder="Ask me anything...">
+              <button class="ask-btn" id="askBtn">ASK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SKILLS ==================== -->
+  <section class="section" id="skills">
+    <div class="section-inner">
+      <div class="bg-text">SKILLS</div>
+      <div class="label reveal" style="text-align:center;margin-bottom:40px;">Skill Universe</div>
+      <div class="web-outer reveal">
+        <div class="web-container" id="webContainer">
+          <div class="web-core-glow"></div>
+          <svg class="web-svg" id="webSvg" viewBox="0 0 900 900"></svg>
+          <div class="web-center-label">CORE</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PROJECTS ==================== -->
+  <section class="section" id="projects">
+    <div class="section-inner">
+      <div class="bg-text">RESEARCH</div>
+      <div class="projects-title reveal">RESEARCH &amp; PROJECTS</div>
+
+      <!-- Current Research -->
+      <div class="label reveal" style="margin-bottom:14px;">Current Research</div>
+      <div class="projects-grid" style="margin-bottom:20px;">
+
+        <!-- GOFM -->
+        <div class="project-card reveal" data-href="gofm-project.html">
+          <div class="card-visual">
+            <div class="card-gradient" style="background:linear-gradient(135deg, rgba(122,15,31,0.56), rgba(59,15,42,0.4));"></div>
+            <img src="images/gofm_architecture.png" alt="">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Graph Optimization Foundation Model</div>
+            <div class="card-meta">The University of Hong Kong<br>Prof. Zuo-Jun Max Shen<br>Under Review &middot; Management Science</div>
+            <p class="card-desc">A pretrain-transfer framework for graph optimization:</p>
+            <ul class="card-list">
+              <li>Self-supervised pretraining on graph structure</li>
+              <li>Supports SP, TSP, CVRP &amp; more tasks</li>
+              <li>Amazon Last Mile case study</li>
+            </ul>
+            <a class="card-arrow" href="gofm-project.html">Full Project Page &rarr;</a>
+            <a class="card-arrow" href="https://arxiv.org/abs/2509.24256" target="_blank" style="margin-left:10px;">arXiv Paper &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Multi-LLM Agents -->
+        <div class="project-card reveal">
+          <div class="card-visual">
+            <div class="card-gradient" style="background:linear-gradient(135deg, rgba(139,124,246,0.4), rgba(59,15,42,0.35));"></div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Cooperative Multi-LLM Agents via Sequential Public Goods Games</div>
+            <div class="card-meta">The University of Hong Kong<br>Prof. Max Shen &amp; Prof. Shaochong Lin<br>May 2025 - Present<br>Under Review at AAAI 2026</div>
+            <p class="card-desc">Building a game-theoretic multi-agent framework to study cooperation among LLM-based agents:</p>
+            <ul class="card-list">
+              <li>Sequential Public Goods Game with belief updating and conditional cooperation</li>
+              <li>Subgame Perfect Nash Equilibrium analysis under full vs. partial observability</li>
+              <li>Mechanism design for incentive alignment</li>
+            </ul>
+            <p class="card-desc">Preprint: <a href="https://arxiv.org/abs/2508.02076" target="_blank" style="color:var(--gold);text-decoration:underline;">arXiv:2508.02076</a></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Past Projects -->
+      <div class="label reveal" style="margin:44px 0 14px;">Past Projects</div>
+      <div class="projects-grid">
+
+        <div class="project-card reveal" data-href="uav-project.html">
+          <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(139,124,246,0.35), rgba(59,15,42,0.3));"></div></div>
+          <div class="card-body">
+            <div class="card-title">UAV Path Planning</div>
+            <div class="card-meta">UC Berkeley<br>Prof. Mark W. Mueller<br>Sep 2024 - May 2025</div>
+            <p class="card-desc">Optimizing UAV paths for agricultural data collection:</p>
+            <ul class="card-list">
+              <li>DARP &amp; MST algorithms</li>
+              <li>Data transmission</li>
+              <li>Automated decision-making</li>
+            </ul>
+            <a class="card-arrow" href="uav-project.html">Learn More &rarr;</a>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(181,155,82,0.35), rgba(122,15,31,0.25));"></div></div>
+          <div class="card-body">
+            <div class="card-title">Image-to-Text AI System</div>
+            <div class="card-meta">Independent Project<br>Feb 2025 - Mar 2025</div>
+            <p class="card-desc">Building a multimodal LLM pipeline to convert images (forms, handwriting) into structured text:</p>
+            <ul class="card-list">
+              <li>Prompt engineering and fine-tuning for Pix2Text / Pix2Struct</li>
+              <li>Mini Program interface; backend in progress</li>
+              <li>Focus on accuracy and generalizability in unstructured data</li>
+            </ul>
+            <a class="card-arrow" href="https://github.com/YunhaoLiang/PictureToLatex--WechatMiniApp" target="_blank">GitHub &rarr;</a>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(30,120,100,0.3), rgba(59,15,42,0.25));"></div></div>
+          <div class="card-body">
+            <div class="card-title">Smart City Innovation</div>
+            <div class="card-meta">Chongqing University<br>2023-2024</div>
+            <p class="card-desc">Analyzing Smart City Pilot Plan impact:</p>
+            <ul class="card-list">
+              <li>Multi-period DID model</li>
+              <li>296 cities study</li>
+              <li>20-year data analysis</li>
+            </ul>
+            <a class="card-arrow" href="https://doi.org/10.3390/su16188007" target="_blank">Paper &rarr;</a>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(122,15,31,0.36), rgba(72,16,56,0.25));"></div></div>
+          <div class="card-body">
+            <div class="card-title">Yin Music Platform</div>
+            <div class="card-meta">Personal Project</div>
+            <p class="card-desc">Full-stack music platform:</p>
+            <ul class="card-list">
+              <li>Spring Boot backend</li>
+              <li>Vue.js frontend</li>
+              <li>MySQL optimization</li>
+            </ul>
+            <a class="card-arrow" href="https://github.com/YunhaoLiang/Yin-Music-Steaming-Platform" target="_blank">GitHub &rarr;</a>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(40,80,160,0.35), rgba(59,15,42,0.25));"></div></div>
+          <div class="card-body">
+            <div class="card-title">Blood Donation System</div>
+            <div class="card-meta">University of Pittsburgh<br>Prof. Bo Zeng</div>
+            <p class="card-desc">Hospital transfusion simulation:</p>
+            <ul class="card-list">
+              <li>Simio modeling</li>
+              <li>Kenyan hospitals study</li>
+              <li>UPMC collaboration</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EDUCATION ==================== -->
+  <section class="section" id="education">
+    <div class="section-inner">
+      <div class="bg-text">ACADEMIC</div>
+      <div class="education-title reveal">MY ACADEMIC JOURNEY</div>
+      <div class="education-grid">
+        <article class="education-card reveal">
+          <div class="education-school">UC BERKELEY</div>
+          <p class="education-desc">
+            Currently pursuing my Master's in Industrial Engineering and Operations Research at Berkeley's College of Engineering.
+            I'm particularly excited about diving deep into mathematical programming, machine learning, and supply chain optimization.
+            Being awarded the Fung Excellence Scholarship ($15000) has been a great honor and motivation for my studies.
+          </p>
+          <div class="education-subtitle">What I'm learning</div>
+          <div class="course-tags">
+            <span>Mathematical Programming</span>
+            <span>Stochastic Process</span>
+            <span>Machine Learning</span>
+            <span>Deep Learning</span>
+            <span>Supply Chain Management</span>
+          </div>
+        </article>
+
+        <article class="education-card reveal">
+          <div class="education-school">UNIVERSITY OF PITTSBURGH</div>
+          <p class="education-desc">
+            My journey in Industrial Engineering really took shape at Pitt's Swanson School of Engineering.
+            I combined my IE major with a Computer Science minor, which gave me a unique perspective on how technology can enhance industrial processes.
+            One of my proudest moments was when our team won 2nd place in the department's senior project competition.
+          </p>
+          <div class="education-subtitle">Key areas I explored</div>
+          <div class="course-tags">
+            <span>Operations Research</span>
+            <span>Supply Chain Analysis</span>
+            <span>Data Structures</span>
+            <span>Algorithms</span>
+            <span>Game Theory</span>
+            <span>Web Development</span>
+          </div>
+        </article>
+
+        <article class="education-card reveal">
+          <div class="education-school">SICHUAN UNIVERSITY</div>
+          <p class="education-desc">
+            My academic foundation began here, where I first discovered my passion for Industrial Engineering.
+            The strong mathematical and statistical background I gained here has proven invaluable in my later studies.
+          </p>
+          <div class="education-subtitle">Foundation courses</div>
+          <div class="course-tags">
+            <span>Statistics</span>
+            <span>Linear Algebra</span>
+            <span>Calculus</span>
+            <span>Information Systems</span>
+            <span>Engineering Economics</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EXPERIENCE ==================== -->
+  <section class="section" id="experience">
+    <div class="section-inner">
+      <div class="bg-text">EXPERIENCE</div>
+      <div class="experience-title reveal">WORK EXPERIENCE</div>
+      <div class="experience-grid">
+        <article class="experience-card reveal">
+          <div class="exp-header">
+            <div class="exp-company">THE UNIVERSITY OF HONG KONG</div>
+            <div class="exp-duration">Starting Sep 2026</div>
+          </div>
+          <div class="exp-role">Incoming Research Assistant (RA) &middot; Supervised by Prof. Zuo-Jun Max Shen</div>
+          <p class="exp-description">
+            Joining HKU to work on AI for Operations Research, graph optimization, and data-driven decision systems,
+            while preparing for the Data &amp; System Engineering PhD program.
+          </p>
+          <div class="exp-highlight">Focus: AI 脳 OR, foundation models, and real-world logistics optimization.</div>
+        </article>
+
+        <article class="experience-card reveal">
+          <div class="exp-header">
+            <div class="exp-company">ALSTOM COMPANY</div>
+            <div class="exp-duration">Jan 2024 - Apr 2024</div>
+          </div>
+          <div class="exp-role">Part-time Logistics Assistant</div>
+          <p class="exp-description">
+            At Alstom's West Mifflin facility, I worked on optimizing the logistics flow for airport rail system production.
+            Using Spiral Layout Planning and Lean methodologies, we improved material handling and space utilization under practical industrial constraints.
+          </p>
+          <div class="exp-highlight">Highlight: Contributed to a 49% improvement in layout efficiency.</div>
+        </article>
+
+        <article class="experience-card reveal">
+          <div class="exp-header">
+            <div class="exp-company">SICHUAN DAZHOU IRON &amp; STEEL GROUP</div>
+            <div class="exp-duration">Jul 2022 - Aug 2022</div>
+          </div>
+          <div class="exp-role">Data Analyst Intern</div>
+          <p class="exp-description">
+            Worked with large-scale manufacturing datasets at the Technology Center.
+            Processed multiple production data streams and applied machine learning methods to support workflow optimization.
+          </p>
+          <div class="exp-highlight">Key achievement: Processed and analyzed 15+ manufacturing datasets.</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT ==================== -->
+  <section class="section" id="contact">
+    <div class="section-inner">
+      <div class="bg-text">CONNECT</div>
+      <div class="contact-layout">
+        <div class="contact-left reveal">
+          <div class="slogan-line">LET'S</div>
+          <div class="slogan-line">SOLVE</div>
+          <div class="slogan-line">SOMETHING</div>
+          <div class="slogan-line accent">HARD,</div>
+          <div class="slogan-line accent">STRANGE,</div>
+          <div class="slogan-line">AND</div>
+          <div class="slogan-line">MEANINGFUL.</div>
+        </div>
+        <div class="contact-right reveal">
+          <div class="collage-title" id="collageTitle"></div>
+          <svg class="megaphone-svg" width="120" height="80" viewBox="0 0 160 100">
+            <path d="M45,35 L45,65 L25,60 L25,40 Z" fill="none" stroke="var(--text)" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M45,35 L110,15 L110,85 L45,65" fill="none" stroke="var(--text)" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M115,35 C130,42 130,58 115,65" fill="none" stroke="var(--text)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M122,25 C145,38 145,62 122,75" fill="none" stroke="var(--text)" stroke-width="1.5" stroke-linecap="round"/>
+            <rect x="10" y="38" width="16" height="24" rx="4" fill="none" stroke="var(--text)" stroke-width="2"/>
+          </svg>
+          <p class="contact-desc">Open to research collaborations, engineering roles, and conversations about optimization, AI, and graph intelligence.</p>
+          <div class="contact-buttons">
+            <a href="mailto:yunhao_liang@berkeley.edu" class="contact-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22,4 L12,13 L2,4"/></svg>
+              yunhao_liang@berkeley.edu
+            </a>
+            <a href="https://github.com/YunhaoLiang" target="_blank" class="contact-btn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              github.com/YunhaoLiang
+            </a>
+            <a href="https://www.linkedin.com/in/yunhao-liang-a06596237/" target="_blank" class="contact-btn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn / Louis Liang
+            </a>
+            <a href="assets/Yunhao_Liang_Resume_4.pdf" target="_blank" class="contact-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+              Resume / PDF
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2026 Yunhao Liang. All rights reserved.</p>
+  </footer>
+
+  <!-- PROJECT DETAIL OVERLAY -->
+  <div class="detail-overlay" id="detailOverlay">
+    <div class="detail-backdrop" id="detailBackdrop"></div>
+    <div class="detail-content" id="detailContent">
+      <button class="detail-close" id="detailClose">&times;</button>
+      <div id="detailInner"></div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ========== SPIDER WEB ========== */
+    (function() {
+      var svg = document.getElementById('webSvg');
+      var cx = 450, cy = 450, numR = 20, numRings = 10, maxR = 430;
+      var angles = [];
+      for (var i = 0; i < numR; i++) angles.push((i * 2 * Math.PI) / numR);
+      var m = '';
+      angles.forEach(function(a) {
+        var x2 = cx + Math.cos(a) * (maxR + 6);
+        var y2 = cy + Math.sin(a) * (maxR + 6);
+        m += '<line x1="'+cx+'" y1="'+cy+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="rgba(255,255,255,0.36)" stroke-width="1.2"/>';
+      });
+      for (var r = 1; r <= numRings; r++) {
+        var radius = (maxR / numRings) * r;
+        var pts = angles.map(function(a, i) {
+          var j = Math.sin(r * 61 + i * 41) * 8;
+          return (cx + Math.cos(a) * (radius + j)).toFixed(1) + ',' + (cy + Math.sin(a) * (radius + j)).toFixed(1);
+        });
+        var alpha = 0.18 + (r / numRings) * 0.14;
+        var w = 0.7 + (1 - r / numRings) * 0.6;
+        m += '<polygon points="'+pts.join(' ')+'" fill="none" stroke="rgba(255,255,255,'+alpha.toFixed(2)+')" stroke-width="'+w.toFixed(1)+'"/>';
+      }
+      m += '<circle cx="'+cx+'" cy="'+cy+'" r="16" fill="rgba(255,255,255,0.28)"/>';
+      m += '<circle cx="'+cx+'" cy="'+cy+'" r="8" fill="rgba(255,255,255,0.55)"/>';
+      svg.innerHTML = m;
+    })();
+
+    /* ========== SKILL NODES ========== */
+    (function() {
+      var c = document.getElementById('webContainer');
+      /* px coords relative to 900x900 container, centre = 450,450
+         Spread nodes WAY out 鈥?outside the inner rings, some near the edge */
+      /* container = 720脳720, centre = 360,360
+         Spread across inner / mid / outer rings 鈥?deliberately irregular */
+      var skills = [
+        /* ---- inner ring (~r 120) ---- */
+        {name:'Python',     px:360, py:240,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'},
+        {name:'Git',        px:468, py:284,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg'},
+        {name:'Linux',      px:250, py:300,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg'},
+        {name:'MySQL',      px:440, py:446,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg'},
+
+        /* ---- mid ring (~r 220) ---- */
+        {name:'OR-Tools',   px:360, py:138,  hl:true, fallback:'OR'},
+        {name:'PyTorch',    px:538, py:168,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg'},
+        {name:'React',      px:180, py:194,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg'},
+        {name:'Java',       px:580, py:380,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg'},
+        {name:'Vue.js',     px:148, py:420,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg'},
+        {name:'Node.js',    px:490, py:540,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg'},
+        {name:'Figma',      px:230, py:540,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg'},
+
+        /* ---- outer ring (~r 320) ---- */
+        {name:'TensorFlow', px:560, py: 76,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg'},
+        {name:'JavaScript', px:660, py:270,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg'},
+        {name:'Spring Boot',px:630, py:580,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg'},
+        {name:'HTML/CSS',   px: 82, py:560,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg'},
+        {name:'GSAP',       px:140, py:130,  logo:'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/greensock.svg'}
+      ];
+      skills.forEach(function(s) {
+        var n = document.createElement('div');
+        n.className = 'skill-node' + (s.hl ? ' highlight' : '');
+        if (s.logo) {
+          n.innerHTML = '<span class="skill-node-inner"><img class="skill-logo" src="'+s.logo+'" alt="'+s.name+'"><span>'+s.name+'</span></span>';
+        } else {
+          n.innerHTML = '<span class="skill-node-inner"><span class="skill-logo-fallback">'+(s.fallback||'S')+'</span><span>'+s.name+'</span></span>';
+        }
+        if (s.name === 'GSAP') {
+          n.querySelector('.skill-logo').style.filter = 'invert(1) brightness(1.8)';
+        }
+        /* position using px on 900px container */
+        n.style.left = s.px + 'px';
+        n.style.top  = s.py + 'px';
+        c.appendChild(n);
+      });
+    })();
+
+    /* ========== STARBURST ========== */
+    (function() {
+      var svg = document.getElementById('starburstSvg');
+      if (!svg) return;
+      var cx = 200, cy = 200, pts = 18, oR = 195, iR = 142;
+      var d = '';
+      for (var i = 0; i < pts * 2; i++) {
+        var a = (i * Math.PI) / pts - Math.PI / 2;
+        var r = i % 2 === 0 ? oR : iR;
+        d += (i === 0 ? 'M' : 'L') + (cx + Math.cos(a) * r).toFixed(1) + ',' + (cy + Math.sin(a) * r).toFixed(1);
+      }
+      d += 'Z';
+      var p = document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d', d); p.setAttribute('class', 'starburst-inner');
+      svg.appendChild(p);
+      var o = document.createElementNS('http://www.w3.org/2000/svg','path');
+      o.setAttribute('d', d); o.setAttribute('fill', 'url(#halftone)');
+      svg.appendChild(o);
+    })();
+
+    /* ========== COLLAGE TITLE ========== */
+    (function() {
+      var t = document.getElementById('collageTitle');
+      var text = 'CONTACT ME';
+      var rots = [-3, 2, -1, 4, -2, 1, -4, 3, -1, 2];
+      var bgs = ['rgba(196,18,48,0.55)','rgba(181,155,82,0.5)','rgba(59,15,42,0.6)','rgba(139,124,246,0.3)','rgba(196,18,48,0.5)','rgba(181,155,82,0.4)','rgba(59,15,42,0.5)','rgba(139,124,246,0.25)','rgba(196,18,48,0.55)','rgba(181,155,82,0.5)'];
+      text.split('').forEach(function(ch, i) {
+        if (ch === ' ') { t.innerHTML += '<span style="width:12px;display:inline-block"></span>'; return; }
+        var s = document.createElement('span');
+        s.className = 'collage-letter'; s.textContent = ch;
+        s.style.transform = 'rotate('+rots[i%rots.length]+'deg)';
+        s.style.background = bgs[i%bgs.length];
+        t.appendChild(s);
+      });
+    })();
+
+    /* ========== ASK THE SPIDER ========== */
+    (function() {
+      var answers = [
+        "I graduated from UC Berkeley with a Master\u2019s in IEOR, and now I\u2019m a Research Assistant at The University of Hong Kong, supervised by Prof. Zuo-Jun Max Shen. I\u2019ll be starting my PhD in Data &amp; System Engineering at HKU this September. My research interests lie at the intersection of Artificial Intelligence and Operations Research \u2014 building intelligent systems that solve real-world optimization problems.",
+        "Creativity is all my superpower",
+        "When I\u2019m not optimizing routes, you\u2019ll find me in ranked VALORANT matches, producing beats in my home studio, or pushing PRs at the gym. I speak English, Chinese, and conversational Japanese. Balance is its own optimization problem."
+      ];
+      var area = document.getElementById('answerArea');
+      var input = document.getElementById('askInput');
+      var btn = document.getElementById('askBtn');
+      var presets = document.querySelectorAll('.preset-btn');
+
+      function setAnswer(t) {
+        area.style.opacity = '0';
+        setTimeout(function() { area.innerHTML = t; area.style.opacity = '1'; }, 250);
+      }
+      presets.forEach(function(b) {
+        b.addEventListener('click', function() {
+          presets.forEach(function(p) { p.classList.remove('active'); });
+          b.classList.add('active');
+          setAnswer(answers[parseInt(b.dataset.q)]);
+        });
+      });
+      function handleAsk() {
+        if (!input.value.trim()) return;
+        presets.forEach(function(p) { p.classList.remove('active'); });
+        setAnswer("Interesting question! My spider-sense is tingling... Drop me an email at <strong>yunhao_liang@berkeley.edu</strong> and let\u2019s discuss over coffee.");
+        input.value = '';
+      }
+      btn.addEventListener('click', handleAsk);
+      input.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleAsk(); });
+    })();
+
+    /* ========== CARD NAVIGATION ========== */
+    document.querySelectorAll('.project-card[data-href]').forEach(function(card) {
+      card.addEventListener('click', function(e) {
+        if (e.target.closest('a')) return;
+        window.location.href = card.dataset.href;
+      });
+    });
+
+    /* ========== PROJECT DETAILS ========== */
+    var projectData = {
+      gofm: {
+        number: '01', title: 'GRAPH OPTIMIZATION FOUNDATION MODEL',
+        meta: 'UC Berkeley \u2192 HKU  |  Prof. Zuo-Jun Max Shen  |  Under Review at Management Science',
+        body: '<p><strong>Paper:</strong> Graph Foundation Models: Bridging Language Model Paradigms and Graph Optimization</p><p><strong>Authors:</strong> <em style="color:var(--gold)">Yunhao Liang</em>, Pujun Zhang, Yuan Qu, Shaochong Lin, Zuo-Jun Max Shen</p><hr style="border:none;border-top:1px solid var(--border);margin:20px 0;"><p>Graph optimization is foundational to modern operations \u2014 routing vehicles through road networks, detecting communities in social networks, and influence-based targeting. Yet prevailing approaches treat each task instance in isolation, discarding persistent topological knowledge embedded in the underlying network.</p><p>GOFM shifts the focus from task-specific solvers to a task-agnostic structural prior. It internalizes network topology and distance geometry by encoding structure-aware random walks into a Transformer through progressive masked reconstruction. At inference, this learned prior facilitates diverse optimization tasks via lightweight constrained decoding, ensuring strict feasibility without retraining.</p><img src="images/gofm_architecture.png" alt="GOFM Framework Architecture"/><p style="font-size:0.8rem;color:var(--text-muted);text-align:center;margin-top:-10px;">Stage I: Structure-aware random path generation \u00b7 Stage II: Transformer pretraining with multi-target masked reconstruction \u00b7 Stage III: Task-based guided decoding</p><img src="images/graph intelligence.png" alt="Graph Optimization Tasks"/><p style="font-size:0.8rem;color:var(--text-muted);text-align:center;margin-top:-10px;">Supported tasks: Shortest Path (SP), TSP, CVRP, Community Detection (CD), and Influence Maximization (IM)</p><h4 style="font-family:var(--font-display);font-size:1.3rem;letter-spacing:2px;margin:28px 0 12px;">KEY CONTRIBUTIONS</h4><ul style="list-style:none;padding:0;"><li style="padding:8px 0 8px 20px;position:relative;border-bottom:1px solid var(--border);"><span style="position:absolute;left:0;color:var(--gold);">\u25b8</span> <strong>Foundation-model framework:</strong> A single pretrained model performs well across multiple NP-hard graph tasks on real sparse networks, without architectural changes.</li><li style="padding:8px 0 8px 20px;position:relative;border-bottom:1px solid var(--border);"><span style="position:absolute;left:0;color:var(--gold);">\u25b8</span> <strong>Self-supervised pretraining:</strong> Structure-aware random walks + progressive masked reconstruction equip the model with a holistic structural prior.</li><li style="padding:8px 0 8px 20px;position:relative;"><span style="position:absolute;left:0;color:var(--gold);">\u25b8</span> <strong>Cross-task reuse:</strong> Validated on networks up to 1,945 nodes across five routing families; generalizes beyond routing to community detection and influence maximization.</li></ul>',
+        stats: [{val:'1,945',lbl:'Max network nodes'},{val:'24.5%',lbl:'Distance reduction (Amazon Last Mile)'},{val:'5',lbl:'Task families'},{val:'100\u00d7',lbl:'Faster than LKH3 / OR-Tools'}],
+        links: [{text:'Full Project Page',url:'gofm-project.html'},{text:'arXiv Paper',url:'https://arxiv.org/abs/2509.24256'}]
+      },
+      uav: {
+        number: '02', title: 'UAV AGRICULTURAL PATH PLANNING',
+        meta: 'UC Berkeley  |  Prof. Mark W. Mueller',
+        body: '<p>Optimizing multi-drone routes for agricultural data collection. The project implements DARP (Divide Areas for Robot Planning) and MST algorithms for optimal coverage path planning across farmland.</p><h4 style="font-family:var(--font-display);font-size:1.3rem;letter-spacing:2px;margin:24px 0 12px;">PATH PLANNING</h4><p>Implementation of DARP and MST algorithms for optimal route planning. The system divides the target area among multiple drones and generates minimum-cost coverage paths ensuring complete field coverage with minimal overlap.</p><h4 style="font-family:var(--font-display);font-size:1.3rem;letter-spacing:2px;margin:24px 0 12px;">DATA TRANSMISSION &amp; SENSORS</h4><p>Testing ESP32 transmitter with simulated signals and implementing soil sensors for agricultural monitoring. The data pipeline supports real-time telemetry between drone fleet and ground station.</p><h4 style="font-family:var(--font-display);font-size:1.3rem;letter-spacing:2px;margin:24px 0 12px;">AUTONOMOUS SYSTEM</h4><p>Integration of sensor data with decision-making algorithms. The autonomous system adapts flight paths in real-time based on environmental conditions, battery levels, and data collection priorities.</p>',
+        stats: [{val:'DARP',lbl:'Area division algorithm'},{val:'MST',lbl:'Route optimization'},{val:'ESP32',lbl:'Data transmission'},{val:'Auto',lbl:'Real-time decision system'}],
+        links: []
+      },
+      music: {
+        number: '03', title: 'YIN MUSIC STREAMING PLATFORM',
+        meta: 'Personal Project  |  Full-Stack Development',
+        body: '<p>A complete music streaming platform built from the ground up, designed to handle real-time audio streaming for concurrent users.</p><h4 style="font-family:var(--font-display);font-size:1.3rem;letter-spacing:2px;margin:24px 0 12px;">BACKEND</h4><p>Spring Boot powers the RESTful API layer with a structured service architecture. MySQL database is optimized with indexing strategies and query tuning for handling large music catalogs and concurrent user sessions efficiently.</p><h4 style="font-family:var(--font-display);font-size:1.3rem;letter-spacing:2px;margin:24px 0 12px;">FRONTEND</h4><p>Vue.js delivers a responsive, modern user experience with real-time audio streaming, playlist management, search functionality, and a clean component-based UI architecture.</p>',
+        stats: [{val:'Spring',lbl:'Boot backend'},{val:'Vue.js',lbl:'Frontend framework'},{val:'MySQL',lbl:'Database + optimization'},{val:'REST',lbl:'API architecture'}],
+        links: [{text:'GitHub Repository',url:'https://github.com/YunhaoLiang/Yin-Music-Steaming-Platform'}]
+      },
+      smartcity: {
+        number: '04', title: 'SMART CITY IMPACT ANALYSIS',
+        meta: 'Chongqing University  |  Published in Sustainability (2024)',
+        body: '<p>A comprehensive empirical study analyzing the impact of China\'s Smart City Pilot Plans on urban development and sustainability.</p><h4 style="font-family:var(--font-display);font-size:1.3rem;letter-spacing:2px;margin:24px 0 12px;">METHODOLOGY</h4><p>Using a multi-period Difference-in-Differences (DID) model, the research examines panel data from 296 Chinese cities spanning 20 years (2003\u20132022). The model accounts for staggered policy adoption, time-varying confounders, and city-level fixed effects.</p><h4 style="font-family:var(--font-display);font-size:1.3rem;letter-spacing:2px;margin:24px 0 12px;">FINDINGS</h4><p>The study provides evidence-based insights into how smart city initiatives affect urban sustainability metrics across economic, environmental, and social dimensions. Results inform policy recommendations for future urban development strategies and smart city program design.</p>',
+        stats: [{val:'296',lbl:'Cities analyzed'},{val:'20yr',lbl:'Panel data timespan'},{val:'DID',lbl:'Causal inference method'},{val:'2024',lbl:'Published in Sustainability'}],
+        links: [{text:'Published Paper (DOI)',url:'https://doi.org/10.3390/su16188007'}]
+      },
+      
+    };
+
+    (function() {
+      var overlay = document.getElementById('detailOverlay');
+      var backdrop = document.getElementById('detailBackdrop');
+      var content = document.getElementById('detailContent');
+      var closeBtn = document.getElementById('detailClose');
+      var inner = document.getElementById('detailInner');
+
+      document.querySelectorAll('.project-card[data-project]').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+          if (e.target.closest('a')) return;
+          var d = projectData[card.dataset.project];
+          if (!d) return;
+          var h = '<div class="detail-number">'+d.number+'</div><div class="detail-title">'+d.title+'</div><div class="detail-meta">'+d.meta+'</div><div class="detail-body">'+d.body+'</div>';
+          if (d.stats.length) {
+            h += '<div class="detail-stats">';
+            d.stats.forEach(function(s) { h += '<div class="detail-stat"><span class="val">'+s.val+'</span><span class="lbl">'+s.lbl+'</span></div>'; });
+            h += '</div>';
+          }
+          if (d.links.length) {
+            h += '<div class="detail-links">';
+            d.links.forEach(function(l) { h += '<a href="'+l.url+'" target="_blank" class="detail-link">'+l.text+' &rarr;</a>'; });
+            h += '</div>';
+          }
+          inner.innerHTML = h;
+          overlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+          gsap.fromTo(backdrop, {opacity:0}, {opacity:1, duration:0.4});
+          gsap.fromTo(content, {opacity:0, y:60, scale:0.96}, {opacity:1, y:0, scale:1, duration:0.6, ease:'power3.out'});
+        });
+      });
+
+      function closeDetail() {
+        gsap.to(content, {opacity:0, y:40, duration:0.3, ease:'power2.in'});
+        gsap.to(backdrop, {opacity:0, duration:0.3, delay:0.1, onComplete:function() {
+          overlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }});
+      }
+      closeBtn.addEventListener('click', closeDetail);
+      backdrop.addEventListener('click', closeDetail);
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && overlay.classList.contains('active')) closeDetail(); });
+    })();
+
+    /* ========== STICKER PEEL + SCROLL ========== */
+    (function() {
+      var sticker = document.getElementById('nameSticker');
+      var corner = sticker.querySelector('.sticker-corner');
+      var peeling = false;
+
+      sticker.addEventListener('click', function() {
+        if (peeling || sticker.classList.contains('peeled')) return;
+        peeling = true;
+        sticker.classList.add('peeling');
+
+        var tlPeel = gsap.timeline({
+          defaults: { ease: 'power3.out' },
+          onComplete: function() {
+            sticker.classList.remove('peeling');
+            sticker.classList.add('peeled');
+            peeling = false;
+            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+
+        tlPeel
+          .to(corner, {
+            width: 150,
+            height: 150,
+            rotation: -26,
+            x: 24,
+            y: 24,
+            duration: 0.26,
+            ease: 'power4.out'
+          }, 0)
+          .to(sticker, {
+            rotation: -6,
+            x: 20,
+            y: -6,
+            duration: 0.2,
+            ease: 'power2.out'
+          }, 0)
+          .to(sticker, {
+            rotationY: -102,
+            z: -110,
+            x: -220,
+            y: -70,
+            opacity: 0,
+            duration: 0.88,
+            ease: 'power4.inOut'
+          }, 0.2);
+      });
+
+      ScrollTrigger.create({
+        trigger: '#about',
+        start: 'top 85%',
+        onEnter: function() { sticker.classList.add('peeled'); },
+        onLeaveBack: function() {
+          sticker.classList.remove('peeled', 'peeling');
+          peeling = false;
+          gsap.set(sticker, { clearProps: 'transform,opacity,visibility' });
+          gsap.set(corner, { clearProps: 'transform,width,height' });
+        }
+      });
+    })();
+
+    /* ========== GSAP SCROLL ANIMATIONS ========== */
+    gsap.utils.toArray('.reveal:not(.project-card)').forEach(function(el) {
+      gsap.from(el, {
+        opacity: 0, y: 40, filter: 'blur(8px)',
+        duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 92%', once: true }
+      });
+    });
+
+    gsap.utils.toArray('.project-card').forEach(function(card, i) {
+      gsap.from(card, {
+        opacity: 0, y: 50, filter: 'blur(6px)',
+        duration: 0.8, delay: i * 0.12, ease: 'power3.out',
+        scrollTrigger: { trigger: card, start: 'top 94%', once: true }
+      });
+    });
+
+    gsap.utils.toArray('.skill-node').forEach(function(node, i) {
+      gsap.from(node, {
+        opacity: 0, scale: 0.5,
+        duration: 0.6, delay: i * 0.07, ease: 'back.out(1.8)',
+        scrollTrigger: { trigger: '.web-outer', start: 'top 85%', once: true }
+      });
+    });
+
+    gsap.utils.toArray('.slogan-line').forEach(function(line, i) {
+      gsap.from(line, {
+        opacity: 0, x: -40,
+        duration: 0.7, delay: i * 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: line, start: 'top 94%', once: true }
+      });
+    });
+
+    gsap.utils.toArray('.bg-text').forEach(function(el) {
+      gsap.to(el, {
+        y: -60,
+        scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: 1.5 }
+      });
+    });
+
+    gsap.to('.web-container', {
+      scale: 1.06,
+      scrollTrigger: { trigger: '#skills', start: 'top bottom', end: 'bottom top', scrub: 2 }
+    });
+    gsap.to('.web-core-glow', {
+      scale: 1.12,
+      opacity: 0.75,
+      duration: 2.4,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut'
+    });
+
+    /* ========== NAV SCROLL ========== */
+    window.addEventListener('scroll', function() {
+      document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    /* ========== SPIDER SYMBOL CLICK ========== */
+    (function() {
+      var el = document.getElementById('spiderSymbol');
+      var r1 = document.getElementById('ring1');
+      var r2 = document.getElementById('ring2');
+      if (!el) return;
+
+      el.addEventListener('click', function(e) {
+        e.stopPropagation();
+        el.classList.toggle('lit');
+
+        gsap.set(r1, { scale: 0.3, opacity: 1 });
+        gsap.to(r1, { scale: 7, opacity: 0, duration: 0.85, ease: 'power3.out' });
+        gsap.set(r2, { scale: 0.5, opacity: 0.8 });
+        gsap.to(r2, { scale: 5.5, opacity: 0, duration: 1, delay: 0.1, ease: 'power3.out' });
+      });
+    })();
+
+    /* ========== HERO ENTRY ========== */
+    var tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+    tl.from('.name-sticker', { opacity: 0, scale: 0.85, y: 50, duration: 1.2, delay: 0.3 })
+      .from('.hero-meta', { opacity: 0, y: 20, duration: 0.8 }, '-=0.4')
+      .from('.scroll-hint', { opacity: 0, duration: 0.8 }, '-=0.3');
+
+    /* Force ScrollTrigger recalculation after all images/fonts load */
+    window.addEventListener('load', function() {
+      ScrollTrigger.refresh();
+    });
+  </script>
 </body>
 </html>

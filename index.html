@@ -133,7 +133,7 @@
       position: relative;
       width: 620px; max-width: 92vw;
       transform: rotate(-2deg);
-      cursor: pointer;
+      cursor: grab;
       border-radius: 14px;
       isolation: isolate;
       transform-style: preserve-3d;
@@ -143,9 +143,10 @@
         0 8px 40px rgba(0,0,0,0.5),
         0 2px 8px rgba(0,0,0,0.3);
       will-change: transform, opacity;
-      touch-action: manipulation;
+      touch-action: pan-y;
       -webkit-tap-highlight-color: transparent;
     }
+    .name-sticker.dragging { cursor: grabbing; }
     .name-sticker:hover { transform: rotate(-1.5deg) scale(1.02); }
     .name-sticker:focus-visible {
       outline: 1px solid rgba(181,155,82,0.85);
@@ -154,9 +155,9 @@
     .name-sticker::before {
       content: '';
       position: absolute;
-      top: -8px; bottom: -8px; left: 50%;
-      width: 18px;
-      transform: translateX(-50%) skewX(-8deg);
+      top: -6px; bottom: -6px; right: 22px;
+      width: 16px;
+      transform: skewX(-8deg);
       background: repeating-linear-gradient(
         to bottom,
         rgba(243,239,232,0),
@@ -173,8 +174,9 @@
     }
     .name-sticker:hover::before,
     .name-sticker:focus-visible::before,
+    .name-sticker.tearing::before,
     .name-sticker.peeling::before {
-      opacity: 0.35;
+      opacity: 0.45;
     }
     .name-sticker.peeling { pointer-events: none; }
     .name-sticker.peeled {
@@ -188,7 +190,7 @@
       z-index: 1;
       border-radius: inherit;
       overflow: hidden;
-      will-change: opacity, filter;
+      will-change: clip-path, filter;
     }
     .sticker-top {
       background: linear-gradient(135deg, var(--red-bright), #a0102a);
@@ -230,6 +232,7 @@
       line-height: 1;
     }
     .sticker-corner {
+      display: none;
       position: absolute;
       bottom: 0; right: 0;
       width: 45px; height: 45px;
@@ -248,17 +251,18 @@
       transform: rotate(-18deg) translate(20px, 20px);
       background: linear-gradient(225deg, rgba(10,10,14,0.95) 42%, rgba(243,239,232,0.22) 42%);
     }
-    .tear-half {
+    .tear-sheet {
       display: none;
       position: absolute;
       inset: 0;
-      opacity: 0;
+      opacity: 1;
       overflow: hidden;
       pointer-events: none;
       border-radius: inherit;
       z-index: 4;
       filter: drop-shadow(0 18px 28px rgba(0,0,0,0.38));
-      will-change: transform, opacity;
+      clip-path: polygon(11% 0, 100% 0, 100% 100%, 11% 100%, 7% 91%, 13% 82%, 8% 72%, 14% 62%, 7% 52%, 12% 42%, 8% 32%, 13% 22%, 7% 12%);
+      will-change: transform, opacity, clip-path;
     }
     .tear-copy {
       width: 100%;
@@ -267,15 +271,44 @@
       overflow: hidden;
       background: var(--bg-panel);
     }
-    .tear-left {
-      clip-path: polygon(0 0, 52% 0, 46% 8%, 54% 16%, 47% 25%, 52% 34%, 44% 43%, 51% 53%, 45% 62%, 53% 73%, 47% 84%, 51% 92%, 48% 100%, 0 100%);
-      transform-origin: 42% 48%;
+    .name-sticker.tearing .tear-sheet,
+    .name-sticker.peeling .tear-sheet {
+      display: block;
     }
-    .tear-right {
-      clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%, 47% 92%, 53% 84%, 45% 73%, 51% 62%, 44% 53%, 52% 43%, 46% 34%, 53% 25%, 45% 16%, 52% 8%);
-      transform-origin: 58% 52%;
+    .tear-grip {
+      position: absolute;
+      top: 50%;
+      right: -4px;
+      width: 42px;
+      height: 116px;
+      transform: translateY(-50%);
+      border-radius: 12px 0 0 12px;
+      border: 1px solid rgba(243,239,232,0.16);
+      border-right: none;
+      background:
+        linear-gradient(90deg, rgba(243,239,232,0.07), rgba(181,155,82,0.16)),
+        repeating-linear-gradient(to bottom, transparent, transparent 9px, rgba(243,239,232,0.13) 9px, rgba(243,239,232,0.13) 11px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(243,239,232,0.5);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: -1px;
+      z-index: 7;
+      box-shadow: -8px 0 18px rgba(0,0,0,0.28);
+      transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+      pointer-events: none;
+      writing-mode: vertical-rl;
     }
-    .name-sticker.peeling .tear-half { display: block; }
+    .name-sticker:hover .tear-grip,
+    .name-sticker:focus-visible .tear-grip,
+    .name-sticker.dragging .tear-grip {
+      color: rgba(243,239,232,0.82);
+      transform: translateY(-50%) translateX(-4px);
+    }
+    .name-sticker.peeling .tear-grip,
+    .name-sticker.peeled .tear-grip { opacity: 0; }
     .name-sticker.peeling .sticker-face { filter: blur(1px); }
     #hero.opened .hero-meta {
       transform: translateY(-8px);
@@ -876,7 +909,7 @@
       .nav-links { display: none; }
       .bg-text { display: none; }
       .slogan-line { font-size: 2.4rem; }
-      .name-sticker { width: 95vw; }
+      .name-sticker { width: 92vw; }
       .sticker-top { padding: 18px 24px 12px; }
       .sticker-bottom { padding: 24px 24px 30px; }
       .sticker-hello { letter-spacing: 6px; }
@@ -885,6 +918,11 @@
         letter-spacing: clamp(3px, 1.6vw, 6px);
       }
       .hero-meta { padding: 0 14px; }
+      .tear-grip {
+        width: 34px;
+        height: 96px;
+        right: -2px;
+      }
       .label { line-height: 1.8; }
       .spider-panel { padding: 28px 22px; }
       .ask-row { flex-direction: column; }
@@ -933,7 +971,7 @@
     <div class="section-inner">
       <div class="bg-text" id="heroBg">LOUIS</div>
       <div class="hero-center">
-        <div class="name-sticker" id="nameSticker" role="button" tabindex="0" aria-label="Tear open the name sticker">
+        <div class="name-sticker" id="nameSticker" role="button" tabindex="0" aria-label="Drag from the right edge to tear open the name sticker">
           <div class="sticker-face">
             <div class="sticker-top">
               <span class="sticker-hello">HELLO</span>
@@ -943,7 +981,7 @@
               <span class="sticker-name">LOUIS LIANG</span>
             </div>
           </div>
-          <div class="tear-half tear-left" aria-hidden="true">
+          <div class="tear-sheet" aria-hidden="true">
             <div class="tear-copy">
               <div class="sticker-top">
                 <span class="sticker-hello">HELLO</span>
@@ -954,17 +992,7 @@
               </div>
             </div>
           </div>
-          <div class="tear-half tear-right" aria-hidden="true">
-            <div class="tear-copy">
-              <div class="sticker-top">
-                <span class="sticker-hello">HELLO</span>
-                <span class="sticker-mynameis">my name is</span>
-              </div>
-              <div class="sticker-bottom">
-                <span class="sticker-name">LOUIS LIANG</span>
-              </div>
-            </div>
-          </div>
+          <div class="tear-grip" aria-hidden="true">&lsaquo;&lsaquo;</div>
           <div class="sticker-corner"></div>
         </div>
         <div class="hero-meta">
@@ -978,7 +1006,7 @@
       </div>
     </div>
     <div class="scroll-hint">
-      <span class="hint-before">Click name tag to tear open</span>
+      <span class="hint-before">Tear open from the right</span>
       <span class="hint-after">Scroll to explore</span>
       <div class="scroll-line"></div>
     </div>
@@ -1582,11 +1610,51 @@
       var sticker = document.getElementById('nameSticker');
       var heroMeta = hero.querySelector('.hero-meta');
       var face = sticker.querySelector('.sticker-face');
-      var corner = sticker.querySelector('.sticker-corner');
-      var leftTear = sticker.querySelector('.tear-left');
-      var rightTear = sticker.querySelector('.tear-right');
+      var tearSheet = sticker.querySelector('.tear-sheet');
       var peeling = false;
+      var dragging = false;
+      var activePointerId = null;
+      var dragStartX = 0;
+      var dragStartProgress = 0;
+      var dragWidth = 1;
+      var progress = 0;
       var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function renderTearProgress(value) {
+        progress = clamp(value, 0, 1);
+        var width = sticker.getBoundingClientRect().width || 620;
+        var pct = (progress * 100).toFixed(2);
+
+        if (progress > 0.001 || peeling) {
+          sticker.classList.add('tearing');
+          gsap.set(tearSheet, { display: 'block' });
+        } else {
+          sticker.classList.remove('tearing');
+          gsap.set(tearSheet, { display: 'none' });
+        }
+
+        gsap.set(face, {
+          clipPath: 'inset(0 ' + pct + '% 0 0)',
+          filter: progress > 0 ? 'blur(' + (progress * 1.2).toFixed(2) + 'px)' : 'none'
+        });
+        gsap.set(tearSheet, {
+          x: -progress * width * 1.08,
+          y: -progress * 18,
+          rotation: -progress * 8,
+          opacity: 1 - progress * 0.16
+        });
+      }
+
+      function clearTearProgress() {
+        progress = 0;
+        sticker.classList.remove('tearing', 'dragging');
+        gsap.set(face, { clearProps: 'clipPath,filter' });
+        gsap.set(tearSheet, { clearProps: 'display,transform,opacity' });
+      }
 
       function openHero() {
         if (peeling || sticker.classList.contains('peeled')) return;
@@ -1598,13 +1666,20 @@
         }
 
         peeling = true;
+        dragging = false;
+        activePointerId = null;
+        sticker.classList.remove('dragging');
         sticker.classList.add('peeling');
         gsap.killTweensOf(heroMeta);
+        gsap.killTweensOf([face, tearSheet, sticker]);
+
+        var state = { p: Math.max(progress, 0.08) };
+        renderTearProgress(state.p);
 
         var tlPeel = gsap.timeline({
           defaults: { ease: 'power3.out' },
           onComplete: function() {
-            sticker.classList.remove('peeling');
+            sticker.classList.remove('peeling', 'tearing', 'dragging');
             sticker.classList.add('peeled');
             hero.classList.add('opened');
             gsap.set(heroMeta, { clearProps: 'opacity,transform' });
@@ -1613,21 +1688,11 @@
         });
 
         tlPeel
-          .set([leftTear, rightTear], { opacity: 1, x: 0, y: 0, rotation: 0, scale: 1 })
-          .to(face, {
-            opacity: 0,
-            filter: 'blur(2px)',
-            duration: 0.18,
-            ease: 'power2.out'
-          }, 0.04)
-          .to(corner, {
-            width: 118,
-            height: 118,
-            rotation: -18,
-            x: 18,
-            y: 18,
-            duration: 0.22,
-            ease: 'power4.out'
+          .to(state, {
+            p: 1,
+            duration: 0.72,
+            ease: 'power4.inOut',
+            onUpdate: function() { renderTearProgress(state.p); }
           }, 0)
           .to(sticker, {
             rotation: -2.5,
@@ -1635,29 +1700,13 @@
             duration: 0.18,
             ease: 'power2.out'
           }, 0)
-          .to(leftTear, {
-            x: -190,
-            y: -70,
-            rotation: -13,
-            scale: 0.98,
+          .to(tearSheet, {
+            y: -34,
+            rotation: -11,
             opacity: 0,
-            duration: 0.82,
-            ease: 'power4.inOut'
-          }, 0.14)
-          .to(rightTear, {
-            x: 190,
-            y: 72,
-            rotation: 14,
-            scale: 0.98,
-            opacity: 0,
-            duration: 0.82,
-            ease: 'power4.inOut'
-          }, 0.16)
-          .to(corner, {
-            opacity: 0,
-            duration: 0.24,
+            duration: 0.28,
             ease: 'power2.out'
-          }, 0.4)
+          }, 0.58)
           .to(sticker, {
             opacity: 0,
             scale: 1.04,
@@ -1666,7 +1715,64 @@
           }, 0.86);
       }
 
-      sticker.addEventListener('click', openHero);
+      function resetTear() {
+        var state = { p: progress };
+        gsap.to(state, {
+          p: 0,
+          duration: 0.28,
+          ease: 'power3.out',
+          onUpdate: function() { renderTearProgress(state.p); },
+          onComplete: clearTearProgress
+        });
+      }
+
+      sticker.addEventListener('pointerdown', function(e) {
+        if (peeling || sticker.classList.contains('peeled')) return;
+
+        var rect = sticker.getBoundingClientRect();
+        var localX = e.clientX - rect.left;
+        if (localX < rect.width * 0.48) return;
+
+        dragging = true;
+        activePointerId = e.pointerId;
+        dragStartX = e.clientX;
+        dragStartProgress = progress;
+        dragWidth = Math.max(1, rect.width);
+        sticker.classList.add('dragging', 'tearing');
+        renderTearProgress(progress);
+        if (sticker.setPointerCapture) sticker.setPointerCapture(e.pointerId);
+        e.preventDefault();
+      });
+
+      sticker.addEventListener('pointermove', function(e) {
+        if (!dragging || e.pointerId !== activePointerId) return;
+        var dx = dragStartX - e.clientX;
+        renderTearProgress(dragStartProgress + dx / (dragWidth * 0.72));
+        e.preventDefault();
+      });
+
+      function finishDrag(e) {
+        if (!dragging || e.pointerId !== activePointerId) return;
+        var dx = dragStartX - e.clientX;
+        dragging = false;
+        activePointerId = null;
+        sticker.classList.remove('dragging');
+        if (sticker.releasePointerCapture) {
+          try { sticker.releasePointerCapture(e.pointerId); } catch (err) {}
+        }
+        if (progress > 0.54 || dx > dragWidth * 0.38) openHero();
+        else resetTear();
+      }
+
+      sticker.addEventListener('pointerup', finishDrag);
+      sticker.addEventListener('pointercancel', function(e) {
+        if (!dragging || e.pointerId !== activePointerId) return;
+        dragging = false;
+        activePointerId = null;
+        sticker.classList.remove('dragging');
+        resetTear();
+      });
+
       sticker.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -1687,10 +1793,10 @@
           sticker.classList.remove('peeled', 'peeling');
           hero.classList.remove('opened');
           peeling = false;
+          dragging = false;
+          activePointerId = null;
           gsap.set(sticker, { clearProps: 'transform,opacity,visibility' });
-          gsap.set(face, { clearProps: 'opacity,filter' });
-          gsap.set([leftTear, rightTear], { clearProps: 'transform,opacity' });
-          gsap.set(corner, { clearProps: 'transform,width,height,opacity' });
+          clearTearProgress();
         }
       });
     })();

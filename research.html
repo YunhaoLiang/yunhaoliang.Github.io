@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -26,10 +26,15 @@
       --font-mono: 'Space Mono', monospace;
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.08) transparent;
+      overflow-x: hidden;
+    }
     body {
       background: var(--bg); color: var(--text);
       font-family: var(--font-body); line-height: 1.6;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
     a { color: inherit; text-decoration: none; }
@@ -63,12 +68,12 @@
     .nav-links a:hover, .nav-links a.active { border-color: var(--border-hover); background: rgba(255,255,255,0.03); }
 
     /* PAGE */
-    .page { max-width: 1400px; margin: 0 auto; padding: 160px 48px 120px; position: relative; z-index: 1; }
+    .page { width: 100%; max-width: 1400px; margin: 0 auto; padding: 160px 48px 120px; position: relative; z-index: 1; }
     .bg-text {
       position: absolute; font-family: var(--font-display);
       font-size: clamp(6rem, 14vw, 13rem); color: var(--text-dim);
       white-space: nowrap; pointer-events: none; user-select: none;
-      top: 80px; right: -30px;
+      top: 80px; right: 0;
     }
     .page-title {
       font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4.5rem);
@@ -228,7 +233,10 @@
       .project-grid { grid-template-columns: 1fr; }
       .featured-body { padding: 24px 22px 28px; }
     }
-    @media (max-width: 600px) { .nav-links { display: none; } }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .bg-text { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -278,18 +286,18 @@
           <span class="feat-tag">Operations Research</span>
         </div>
         <p class="feat-desc">
-          A pretrain-transfer framework for graph optimization. GOFM internalizes network topology by encoding structure-aware random walks into a Transformer through progressive masked reconstruction. At inference, a single pretrained backbone facilitates SP, TSP, CVRP, Community Detection, and Influence Maximization via lightweight constrained decoding 鈥?no retraining required.
+          A pretrain-transfer framework for graph optimization. GOFM internalizes network topology by encoding structure-aware random walks into a Transformer through progressive masked reconstruction. At inference, a single pretrained backbone facilitates SP, TSP, CVRP, Community Detection, and Influence Maximization via lightweight constrained decoding &mdash; no retraining required.
         </p>
         <div class="stats-row">
           <div class="stat-chip"><span class="val">1,945</span><span class="lbl">Max nodes</span></div>
           <div class="stat-chip"><span class="val">24.5%</span><span class="lbl">Distance reduction</span></div>
           <div class="stat-chip"><span class="val">5</span><span class="lbl">Task families</span></div>
-          <div class="stat-chip"><span class="val">100脳</span><span class="lbl">vs LKH3 / OR-Tools</span></div>
+          <div class="stat-chip"><span class="val">100&times;</span><span class="lbl">vs LKH3 / OR-Tools</span></div>
         </div>
         <ul class="feat-list">
           <li>Self-supervised pretraining on graph structure via structure-aware random walks</li>
           <li>Supports SP, TSP, CVRP, Community Detection &amp; Influence Maximization</li>
-          <li>Amazon Last Mile real-world case study 鈥?24.5% distance reduction</li>
+          <li>Amazon Last Mile real-world case study &mdash; 24.5% distance reduction</li>
           <li>Near-perfect feasibility on city-scale sparse networks</li>
         </ul>
         <img src="images/graph intelligence.png" alt="Graph Optimization Tasks" style="width:100%;border-radius:12px;border:1px solid var(--border);margin-bottom:20px;cursor:pointer;" onclick="openModal(this.src)">
@@ -305,11 +313,11 @@
         <div class="feat-title">COOPERATIVE MULTI-LLM AGENTS VIA SEQUENTIAL PUBLIC GOODS GAMES</div>
         <div class="feat-meta">
           The University of Hong Kong &nbsp;&middot;&nbsp; Prof. Max Shen &amp; Prof. Shaochong Lin<br>
-          May 2025 鈥?Present &nbsp;&middot;&nbsp; Under Review at AAAI 2026 &nbsp;&middot;&nbsp;
+          May 2025 &ndash; Present &nbsp;&middot;&nbsp; Under Review at AAAI 2026 &nbsp;&middot;&nbsp;
           <a href="https://arxiv.org/abs/2508.02076" target="_blank">arXiv:2508.02076</a>
         </div>
         <div class="feat-tags">
-          <span class="feat-tag highlight">Under Review 路 AAAI 2026</span>
+          <span class="feat-tag highlight">Under Review &middot; AAAI 2026</span>
           <span class="feat-tag">Multi-Agent Systems</span>
           <span class="feat-tag">LLM</span>
           <span class="feat-tag">Game Theory</span>
@@ -335,7 +343,7 @@
         <div class="proj-number">03</div>
         <div class="proj-title">UAV PATH PLANNING</div>
         <div class="proj-meta">
-          UC Berkeley &middot; Prof. Mark W. Mueller<br>Sep 2024 鈥?May 2025
+          UC Berkeley &middot; Prof. Mark W. Mueller<br>Sep 2024 &ndash; May 2025
         </div>
         <div class="proj-tags">
           <span class="proj-tag">Robotics</span>
@@ -355,7 +363,7 @@
         <div class="proj-number">04</div>
         <div class="proj-title">IMAGE-TO-TEXT AI SYSTEM</div>
         <div class="proj-meta">
-          Independent Project<br>Feb 2025 鈥?Mar 2025
+          Independent Project<br>Feb 2025 &ndash; Mar 2025
         </div>
         <div class="proj-tags">
           <span class="proj-tag">Multimodal LLM</span>
@@ -374,7 +382,7 @@
         <div class="proj-number">05</div>
         <div class="proj-title">SMART CITY INNOVATION</div>
         <div class="proj-meta">
-          Chongqing University<br>2023 鈥?2024
+          Chongqing University<br>2023 &ndash; 2024
         </div>
         <div class="proj-tags">
           <span class="proj-tag">Data Science</span>
@@ -432,7 +440,7 @@
   </div>
 
   <footer class="footer">
-    <p>&copy; 2025 Yunhao Liang. All rights reserved.</p>
+    <p>&copy; 2026 Yunhao Liang. All rights reserved.</p>
   </footer>
 
   <!-- IMAGE MODAL -->

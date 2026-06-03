@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -34,6 +34,7 @@
       scroll-behavior: smooth;
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,0.08) transparent;
+      overflow-x: hidden;
     }
 
     body {
@@ -91,7 +92,7 @@
       position: relative; min-height: 100vh;
       padding: 160px 48px 120px; z-index: 1;
     }
-    .section-inner { max-width: 1400px; margin: 0 auto; position: relative; }
+    .section-inner { width: 100%; max-width: 1400px; margin: 0 auto; position: relative; }
     .bg-text {
       position: absolute; font-family: var(--font-display);
       font-size: clamp(6rem, 15vw, 14rem); color: var(--text-dim);
@@ -108,6 +109,12 @@
       min-height: 100vh; padding-top: 80px;
       perspective: 1200px;
     }
+    #hero .section-inner {
+      min-height: calc(100svh - 200px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     #hero .bg-text {
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
@@ -119,6 +126,7 @@
       align-items: center; gap: 36px;
       position: relative; z-index: 2;
     }
+    #hero.opened .hero-center { gap: 18px; }
 
     /* ---- NAME STICKER ---- */
     .name-sticker {
@@ -126,20 +134,61 @@
       width: 620px; max-width: 92vw;
       transform: rotate(-2deg);
       cursor: pointer;
+      border-radius: 14px;
+      isolation: isolate;
       transform-style: preserve-3d;
-      transform-origin: 100% 100%;
+      transform-origin: center;
       transition: transform 0.9s cubic-bezier(0.4,0,0.15,1), opacity 0.7s;
       box-shadow:
         0 8px 40px rgba(0,0,0,0.5),
         0 2px 8px rgba(0,0,0,0.3);
       will-change: transform, opacity;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
     .name-sticker:hover { transform: rotate(-1.5deg) scale(1.02); }
+    .name-sticker:focus-visible {
+      outline: 1px solid rgba(181,155,82,0.85);
+      outline-offset: 8px;
+    }
+    .name-sticker::before {
+      content: '';
+      position: absolute;
+      top: -8px; bottom: -8px; left: 50%;
+      width: 18px;
+      transform: translateX(-50%) skewX(-8deg);
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(243,239,232,0),
+        rgba(243,239,232,0) 7px,
+        rgba(243,239,232,0.36) 7px,
+        rgba(243,239,232,0.36) 10px,
+        rgba(243,239,232,0) 10px,
+        rgba(243,239,232,0) 19px
+      );
+      opacity: 0;
+      pointer-events: none;
+      z-index: 5;
+      transition: opacity 0.35s ease;
+    }
+    .name-sticker:hover::before,
+    .name-sticker:focus-visible::before,
+    .name-sticker.peeling::before {
+      opacity: 0.35;
+    }
     .name-sticker.peeling { pointer-events: none; }
     .name-sticker.peeled {
       opacity: 0;
       pointer-events: none;
       visibility: hidden;
+    }
+    #hero.opened .name-sticker.peeled { display: none; }
+    .sticker-face {
+      position: relative;
+      z-index: 1;
+      border-radius: inherit;
+      overflow: hidden;
+      will-change: opacity, filter;
     }
     .sticker-top {
       background: linear-gradient(135deg, var(--red-bright), #a0102a);
@@ -189,6 +238,7 @@
       transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
       transform-origin: 100% 100%;
       box-shadow: -6px -6px 16px rgba(0,0,0,0.32);
+      z-index: 6;
     }
     .name-sticker:hover .sticker-corner {
       width: 60px; height: 60px;
@@ -198,13 +248,59 @@
       transform: rotate(-18deg) translate(20px, 20px);
       background: linear-gradient(225deg, rgba(10,10,14,0.95) 42%, rgba(243,239,232,0.22) 42%);
     }
+    .tear-half {
+      display: none;
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      border-radius: inherit;
+      z-index: 4;
+      filter: drop-shadow(0 18px 28px rgba(0,0,0,0.38));
+      will-change: transform, opacity;
+    }
+    .tear-copy {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      overflow: hidden;
+      background: var(--bg-panel);
+    }
+    .tear-left {
+      clip-path: polygon(0 0, 52% 0, 46% 8%, 54% 16%, 47% 25%, 52% 34%, 44% 43%, 51% 53%, 45% 62%, 53% 73%, 47% 84%, 51% 92%, 48% 100%, 0 100%);
+      transform-origin: 42% 48%;
+    }
+    .tear-right {
+      clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%, 47% 92%, 53% 84%, 45% 73%, 51% 62%, 44% 53%, 52% 43%, 46% 34%, 53% 25%, 45% 16%, 52% 8%);
+      transform-origin: 58% 52%;
+    }
+    .name-sticker.peeling .tear-half { display: block; }
+    .name-sticker.peeling .sticker-face { filter: blur(1px); }
+    #hero.opened .hero-meta {
+      transform: translateY(-8px);
+      opacity: 1;
+    }
 
     .hero-meta {
       display: flex; flex-direction: column; align-items: center; gap: 8px;
       text-align: center;
+      opacity: 0.82;
+      transform: translateY(0);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
+    .hero-open-title {
+      display: none;
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 11vw, 7.5rem);
+      letter-spacing: clamp(4px, 1.2vw, 10px);
+      line-height: 0.95;
+      color: var(--text);
+    }
+    #hero.opened .hero-open-title { display: block; }
     .hero-role {
       font-size: 0.95rem; color: var(--text-muted); line-height: 1.7;
+      max-width: 560px;
     }
     .hero-role strong { color: var(--text); font-weight: 600; }
 
@@ -218,6 +314,9 @@
       font-family: var(--font-mono); font-size: 0.6rem;
       text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted);
     }
+    .scroll-hint .hint-after { display: none; }
+    #hero.opened .scroll-hint .hint-before { display: none; }
+    #hero.opened .scroll-hint .hint-after { display: inline; }
     .scroll-line {
       width: 1px; height: 48px;
       background: linear-gradient(to bottom, var(--text-muted), transparent);
@@ -355,7 +454,7 @@
     }
     .ask-row { display: flex; gap: 10px; }
     .ask-input {
-      flex: 1; background: rgba(255,255,255,0.03);
+      flex: 1; min-width: 0; background: rgba(255,255,255,0.03);
       border: 1px solid var(--border); border-radius: 30px;
       padding: 12px 20px; font-family: var(--font-body);
       font-size: 0.85rem; color: var(--text); outline: none;
@@ -387,13 +486,16 @@
     }
     .web-outer {
       position: relative;
-      width: 720px; height: 720px;
+      width: min(720px, calc(100vw - 64px));
+      max-width: 100%;
+      aspect-ratio: 1 / 1;
       margin: 0 auto;
       z-index: 2;
     }
     .web-container {
       position: relative;
       width: 100%; height: 100%;
+      transform-origin: center center;
     }
     .web-svg {
       width: 100%; height: 100%;
@@ -405,7 +507,8 @@
     .web-core-glow {
       position: absolute;
       top: 50%; left: 50%;
-      width: 320px; height: 320px;
+      width: 45%; height: 45%;
+      max-width: 320px; max-height: 320px;
       transform: translate(-50%, -50%);
       border-radius: 50%;
       background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, rgba(181,155,82,0.1) 35%, transparent 65%);
@@ -414,9 +517,9 @@
     .skill-node {
       position: absolute;
       transform: translate(-50%, -50%);
-      font-family: var(--font-mono); font-size: 0.68rem;
+      font-family: var(--font-mono); font-size: clamp(0.5rem, 1.8vw, 0.68rem);
       text-transform: uppercase; letter-spacing: 1px;
-      padding: 9px 16px;
+      padding: clamp(5px, 1.4vw, 9px) clamp(8px, 2.4vw, 16px);
       background: linear-gradient(145deg, rgba(18,18,30,0.96), rgba(8,8,14,0.93));
       border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
       color: var(--text-muted); white-space: nowrap;
@@ -446,8 +549,8 @@
     .web-center-label {
       position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      font-family: var(--font-display); font-size: 2.2rem;
-      letter-spacing: 8px; color: rgba(243,239,232,0.92);
+      font-family: var(--font-display); font-size: clamp(1.2rem, 6vw, 2.2rem);
+      letter-spacing: clamp(3px, 1.4vw, 8px); color: rgba(243,239,232,0.92);
       z-index: 5; pointer-events: none;
       text-shadow: 0 0 20px rgba(255,255,255,0.3), 0 0 40px rgba(139,124,246,0.36);
     }
@@ -675,7 +778,7 @@
     }
     .detail-close:hover { border-color: var(--text); color: var(--text); }
     .detail-number { font-family: var(--font-display); font-size: 5rem; color: var(--text-dim); line-height: 1; }
-    .detail-title { font-family: var(--font-display); font-size: 2.8rem; letter-spacing: 2px; margin: 8px 0 16px; }
+    .detail-title { font-family: var(--font-display); font-size: clamp(2rem, 8vw, 2.8rem); letter-spacing: 2px; margin: 8px 0 16px; }
     .detail-meta {
       font-family: var(--font-mono); font-size: 0.72rem;
       text-transform: uppercase; letter-spacing: 2px;
@@ -691,7 +794,7 @@
     }
     .detail-stat .val { font-family: var(--font-display); font-size: 2.2rem; color: var(--gold); display: block; }
     .detail-stat .lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
-    .detail-links { display: flex; gap: 10px; margin-top: 30px; }
+    .detail-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
     .detail-link {
       font-family: var(--font-mono); font-size: 0.72rem;
       text-transform: uppercase; letter-spacing: 1px;
@@ -733,6 +836,7 @@
       font-family: var(--font-mono); font-size: 0.75rem;
       text-transform: uppercase; letter-spacing: 1.5px;
       color: var(--text-muted); transition: all 0.3s;
+      overflow-wrap: anywhere;
     }
     .contact-btn:hover {
       border-color: var(--border-hover); color: var(--text); transform: translateX(6px);
@@ -767,9 +871,36 @@
       .projects-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
+      .section { padding: 110px 20px 72px; }
+      #hero .section-inner { min-height: calc(100svh - 164px); }
       .nav-links { display: none; }
+      .bg-text { display: none; }
       .slogan-line { font-size: 2.4rem; }
       .name-sticker { width: 95vw; }
+      .sticker-top { padding: 18px 24px 12px; }
+      .sticker-bottom { padding: 24px 24px 30px; }
+      .sticker-hello { letter-spacing: 6px; }
+      .sticker-name {
+        font-size: clamp(2.8rem, 14vw, 4rem);
+        letter-spacing: clamp(3px, 1.6vw, 6px);
+      }
+      .hero-meta { padding: 0 14px; }
+      .label { line-height: 1.8; }
+      .spider-panel { padding: 28px 22px; }
+      .ask-row { flex-direction: column; }
+      .ask-btn { width: 100%; }
+      .web-outer { width: min(560px, calc(100vw - 64px)); }
+      .skill-node { letter-spacing: 0.5px; }
+      .skill-logo, .skill-logo-fallback { width: 13px; height: 13px; }
+      .detail-content { width: calc(100% - 32px); padding: 34px 22px 28px; }
+      .detail-close { top: 12px; right: 12px; width: 38px; height: 38px; }
+      .detail-number { font-size: 3.5rem; }
+      .detail-link { width: 100%; text-align: center; }
+      .contact-btn { padding: 14px 16px; font-size: 0.68rem; letter-spacing: 1px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .name-sticker, .sticker-corner, .scroll-line { transition: none; animation: none; }
+      .name-sticker::before { display: none; }
     }
   </style>
 </head>
@@ -802,17 +933,42 @@
     <div class="section-inner">
       <div class="bg-text" id="heroBg">LOUIS</div>
       <div class="hero-center">
-        <div class="name-sticker" id="nameSticker">
-          <div class="sticker-top">
-            <span class="sticker-hello">HELLO</span>
-            <span class="sticker-mynameis">my name is</span>
+        <div class="name-sticker" id="nameSticker" role="button" tabindex="0" aria-label="Tear open the name sticker">
+          <div class="sticker-face">
+            <div class="sticker-top">
+              <span class="sticker-hello">HELLO</span>
+              <span class="sticker-mynameis">my name is</span>
+            </div>
+            <div class="sticker-bottom">
+              <span class="sticker-name">LOUIS LIANG</span>
+            </div>
           </div>
-          <div class="sticker-bottom">
-            <span class="sticker-name">LOUIS LIANG</span>
+          <div class="tear-half tear-left" aria-hidden="true">
+            <div class="tear-copy">
+              <div class="sticker-top">
+                <span class="sticker-hello">HELLO</span>
+                <span class="sticker-mynameis">my name is</span>
+              </div>
+              <div class="sticker-bottom">
+                <span class="sticker-name">LOUIS LIANG</span>
+              </div>
+            </div>
+          </div>
+          <div class="tear-half tear-right" aria-hidden="true">
+            <div class="tear-copy">
+              <div class="sticker-top">
+                <span class="sticker-hello">HELLO</span>
+                <span class="sticker-mynameis">my name is</span>
+              </div>
+              <div class="sticker-bottom">
+                <span class="sticker-name">LOUIS LIANG</span>
+              </div>
+            </div>
           </div>
           <div class="sticker-corner"></div>
         </div>
         <div class="hero-meta">
+          <div class="hero-open-title">LOUIS LIANG</div>
           <p class="hero-role">
             <strong>Research Assistant @ HKU</strong><br>
             Incoming PhD &middot; Data &amp; System Engineering &middot; Sept 2026
@@ -820,10 +976,11 @@
           <div class="label" style="margin-top:8px;">AI &times; OR &middot; Supervised by Prof. Zuo-Jun Max Shen</div>
         </div>
       </div>
-      <div class="scroll-hint">
-        <span>Click sticker or scroll</span>
-        <div class="scroll-line"></div>
-      </div>
+    </div>
+    <div class="scroll-hint">
+      <span class="hint-before">Click name tag to tear open</span>
+      <span class="hint-after">Scroll to explore</span>
+      <div class="scroll-line"></div>
     </div>
   </section>
 
@@ -843,7 +1000,7 @@
           <div class="spider-panel">
             <div class="panel-title"><span class="dot"></span> ASK THE SPIDER</div>
             <div class="answer-area" id="answerArea">
-              I'm Yunhao Liang. Currently a Research Assistant at HKU, starting my PhD in Data &amp; System Engineering this September under Prof. Zuo-Jun Max Shen. I find the path &mdash; both in Artificial Intelligence and Operation Research.
+              I'm Yunhao Liang. Currently a Research Assistant at HKU, starting my PhD in Data &amp; System Engineering this September under Prof. Zuo-Jun Max Shen. I find the path &mdash; both in Artificial Intelligence and Operations Research.
             </div>
             <div class="preset-questions">
               <button class="preset-btn" data-q="0">Research Focus</button>
@@ -912,7 +1069,7 @@
           </div>
           <div class="card-body">
             <div class="card-title">Cooperative Multi-LLM Agents via Sequential Public Goods Games</div>
-            <div class="card-meta">The University of Hong Kong<br>Prof. Max Shen &amp; Prof. Shaochong Lin<br>May 2025 - Present<br>Under Review at AAAI 2026</div>
+            <div class="card-meta">The University of Hong Kong<br>Prof. Max Shen &amp; Prof. Shaochong Lin<br>May 2025 &ndash; Present<br>Under Review at AAAI 2026</div>
             <p class="card-desc">Building a game-theoretic multi-agent framework to study cooperation among LLM-based agents:</p>
             <ul class="card-list">
               <li>Sequential Public Goods Game with belief updating and conditional cooperation</li>
@@ -933,7 +1090,7 @@
           <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(139,124,246,0.35), rgba(59,15,42,0.3));"></div></div>
           <div class="card-body">
             <div class="card-title">UAV Path Planning</div>
-            <div class="card-meta">UC Berkeley<br>Prof. Mark W. Mueller<br>Sep 2024 - May 2025</div>
+            <div class="card-meta">UC Berkeley<br>Prof. Mark W. Mueller<br>Sep 2024 &ndash; May 2025</div>
             <p class="card-desc">Optimizing UAV paths for agricultural data collection:</p>
             <ul class="card-list">
               <li>DARP &amp; MST algorithms</li>
@@ -948,7 +1105,7 @@
           <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(181,155,82,0.35), rgba(122,15,31,0.25));"></div></div>
           <div class="card-body">
             <div class="card-title">Image-to-Text AI System</div>
-            <div class="card-meta">Independent Project<br>Feb 2025 - Mar 2025</div>
+            <div class="card-meta">Independent Project<br>Feb 2025 &ndash; Mar 2025</div>
             <p class="card-desc">Building a multimodal LLM pipeline to convert images (forms, handwriting) into structured text:</p>
             <ul class="card-list">
               <li>Prompt engineering and fine-tuning for Pix2Text / Pix2Struct</li>
@@ -963,7 +1120,7 @@
           <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(30,120,100,0.3), rgba(59,15,42,0.25));"></div></div>
           <div class="card-body">
             <div class="card-title">Smart City Innovation</div>
-            <div class="card-meta">Chongqing University<br>2023-2024</div>
+            <div class="card-meta">Chongqing University<br>2023 &ndash; 2024</div>
             <p class="card-desc">Analyzing Smart City Pilot Plan impact:</p>
             <ul class="card-list">
               <li>Multi-period DID model</li>
@@ -1018,7 +1175,7 @@
           <p class="education-desc">
             Currently pursuing my Master's in Industrial Engineering and Operations Research at Berkeley's College of Engineering.
             I'm particularly excited about diving deep into mathematical programming, machine learning, and supply chain optimization.
-            Being awarded the Fung Excellence Scholarship ($15000) has been a great honor and motivation for my studies.
+            Being awarded the Fung Excellence Scholarship ($15,000) has been a great honor and motivation for my studies.
           </p>
           <div class="education-subtitle">What I'm learning</div>
           <div class="course-tags">
@@ -1083,13 +1240,13 @@
             Joining HKU to work on AI for Operations Research, graph optimization, and data-driven decision systems,
             while preparing for the Data &amp; System Engineering PhD program.
           </p>
-          <div class="exp-highlight">Focus: AI 脳 OR, foundation models, and real-world logistics optimization.</div>
+          <div class="exp-highlight">Focus: AI &times; OR, foundation models, and real-world logistics optimization.</div>
         </article>
 
         <article class="experience-card reveal">
           <div class="exp-header">
             <div class="exp-company">ALSTOM COMPANY</div>
-            <div class="exp-duration">Jan 2024 - Apr 2024</div>
+            <div class="exp-duration">Jan 2024 &ndash; Apr 2024</div>
           </div>
           <div class="exp-role">Part-time Logistics Assistant</div>
           <p class="exp-description">
@@ -1102,7 +1259,7 @@
         <article class="experience-card reveal">
           <div class="exp-header">
             <div class="exp-company">SICHUAN DAZHOU IRON &amp; STEEL GROUP</div>
-            <div class="exp-duration">Jul 2022 - Aug 2022</div>
+            <div class="exp-duration">Jul 2022 &ndash; Aug 2022</div>
           </div>
           <div class="exp-role">Data Analyst Intern</div>
           <p class="exp-description">
@@ -1211,10 +1368,8 @@
     /* ========== SKILL NODES ========== */
     (function() {
       var c = document.getElementById('webContainer');
-      /* px coords relative to 900x900 container, centre = 450,450
-         Spread nodes WAY out 鈥?outside the inner rings, some near the edge */
-      /* container = 720脳720, centre = 360,360
-         Spread across inner / mid / outer rings 鈥?deliberately irregular */
+      /* Coordinates are based on the 720px design size and converted to
+         percentages so the web stays centered on narrow screens. */
       var skills = [
         /* ---- inner ring (~r 120) ---- */
         {name:'Python',     px:360, py:240,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'},
@@ -1238,6 +1393,16 @@
         {name:'HTML/CSS',   px: 82, py:560,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg'},
         {name:'GSAP',       px:140, py:130,  logo:'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/greensock.svg'}
       ];
+      function setNodePosition(node, skill) {
+        var rect = c.getBoundingClientRect();
+        var radialScale = rect.width < 560 ? 0.9 : 1;
+        var x = 360 + (skill.px - 360) * radialScale;
+        var y = 360 + (skill.py - 360) * radialScale;
+        node.style.left = (x / 720 * 100).toFixed(3) + '%';
+        node.style.top  = (y / 720 * 100).toFixed(3) + '%';
+      }
+
+      var nodes = [];
       skills.forEach(function(s) {
         var n = document.createElement('div');
         n.className = 'skill-node' + (s.hl ? ' highlight' : '');
@@ -1249,10 +1414,12 @@
         if (s.name === 'GSAP') {
           n.querySelector('.skill-logo').style.filter = 'invert(1) brightness(1.8)';
         }
-        /* position using px on 900px container */
-        n.style.left = s.px + 'px';
-        n.style.top  = s.py + 'px';
+        setNodePosition(n, s);
+        nodes.push({ node: n, skill: s });
         c.appendChild(n);
+      });
+      window.addEventListener('resize', function() {
+        nodes.forEach(function(item) { setNodePosition(item.node, item.skill); });
       });
     })();
 
@@ -1409,64 +1576,121 @@
       document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && overlay.classList.contains('active')) closeDetail(); });
     })();
 
-    /* ========== STICKER PEEL + SCROLL ========== */
+    /* ========== STICKER TEAR OPEN ========== */
     (function() {
+      var hero = document.getElementById('hero');
       var sticker = document.getElementById('nameSticker');
+      var heroMeta = hero.querySelector('.hero-meta');
+      var face = sticker.querySelector('.sticker-face');
       var corner = sticker.querySelector('.sticker-corner');
+      var leftTear = sticker.querySelector('.tear-left');
+      var rightTear = sticker.querySelector('.tear-right');
       var peeling = false;
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      sticker.addEventListener('click', function() {
+      function openHero() {
         if (peeling || sticker.classList.contains('peeled')) return;
+        if (reduceMotion) {
+          sticker.classList.add('peeled');
+          hero.classList.add('opened');
+          gsap.set(heroMeta, { clearProps: 'opacity,transform' });
+          return;
+        }
+
         peeling = true;
         sticker.classList.add('peeling');
+        gsap.killTweensOf(heroMeta);
 
         var tlPeel = gsap.timeline({
           defaults: { ease: 'power3.out' },
           onComplete: function() {
             sticker.classList.remove('peeling');
             sticker.classList.add('peeled');
+            hero.classList.add('opened');
+            gsap.set(heroMeta, { clearProps: 'opacity,transform' });
             peeling = false;
-            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
           }
         });
 
         tlPeel
+          .set([leftTear, rightTear], { opacity: 1, x: 0, y: 0, rotation: 0, scale: 1 })
+          .to(face, {
+            opacity: 0,
+            filter: 'blur(2px)',
+            duration: 0.18,
+            ease: 'power2.out'
+          }, 0.04)
           .to(corner, {
-            width: 150,
-            height: 150,
-            rotation: -26,
-            x: 24,
-            y: 24,
-            duration: 0.26,
+            width: 118,
+            height: 118,
+            rotation: -18,
+            x: 18,
+            y: 18,
+            duration: 0.22,
             ease: 'power4.out'
           }, 0)
           .to(sticker, {
-            rotation: -6,
-            x: 20,
-            y: -6,
-            duration: 0.2,
+            rotation: -2.5,
+            scale: 1.018,
+            duration: 0.18,
             ease: 'power2.out'
           }, 0)
-          .to(sticker, {
-            rotationY: -102,
-            z: -110,
-            x: -220,
+          .to(leftTear, {
+            x: -190,
             y: -70,
+            rotation: -13,
+            scale: 0.98,
             opacity: 0,
-            duration: 0.88,
+            duration: 0.82,
             ease: 'power4.inOut'
-          }, 0.2);
+          }, 0.14)
+          .to(rightTear, {
+            x: 190,
+            y: 72,
+            rotation: 14,
+            scale: 0.98,
+            opacity: 0,
+            duration: 0.82,
+            ease: 'power4.inOut'
+          }, 0.16)
+          .to(corner, {
+            opacity: 0,
+            duration: 0.24,
+            ease: 'power2.out'
+          }, 0.4)
+          .to(sticker, {
+            opacity: 0,
+            scale: 1.04,
+            duration: 0.18,
+            ease: 'power2.out'
+          }, 0.86);
+      }
+
+      sticker.addEventListener('click', openHero);
+      sticker.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openHero();
+        }
       });
 
       ScrollTrigger.create({
         trigger: '#about',
         start: 'top 85%',
-        onEnter: function() { sticker.classList.add('peeled'); },
+        onEnter: function() {
+          sticker.classList.add('peeled');
+          hero.classList.add('opened');
+          gsap.killTweensOf(heroMeta);
+          gsap.set(heroMeta, { clearProps: 'opacity,transform' });
+        },
         onLeaveBack: function() {
           sticker.classList.remove('peeled', 'peeling');
+          hero.classList.remove('opened');
           peeling = false;
           gsap.set(sticker, { clearProps: 'transform,opacity,visibility' });
-          gsap.set(corner, { clearProps: 'transform,width,height' });
+          gsap.set(face, { clearProps: 'opacity,filter' });
+          gsap.set([leftTear, rightTear], { clearProps: 'transform,opacity' });
+          gsap.set(corner, { clearProps: 'transform,width,height,opacity' });
         }
       });
     })();

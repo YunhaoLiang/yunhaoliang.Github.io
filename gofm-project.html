@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GOFM — Yunhao Liang</title>
+  <title>GOFM &mdash; Yunhao Liang</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -57,7 +57,7 @@
       margin-bottom: 32px; transition: color 0.3s;
     }
     .back-link:hover { color: var(--text); }
-    .back-link::before { content: '←'; font-size: 0.9rem; }
+    .back-link::before { content: '\2190'; font-size: 0.9rem; }
 
     /* HERO */
     .proj-hero { margin-bottom: 32px; }
@@ -149,7 +149,7 @@
       border-bottom: 1px solid var(--border);
     }
     .contrib-list li:last-child { border-bottom: none; }
-    .contrib-list li::before { content: '▸'; position: absolute; left: 0; color: var(--gold); }
+    .contrib-list li::before { content: '\25b8'; position: absolute; left: 0; color: var(--gold); }
     .contrib-list li strong { color: var(--text); font-weight: 600; }
 
     /* FOOTER */
@@ -219,7 +219,7 @@
         Under Review &nbsp;&middot;&nbsp; Management Science
       </div>
       <div class="proj-tags">
-        <span class="proj-tag hl">Under Review · Management Science</span>
+        <span class="proj-tag hl">Under Review &middot; Management Science</span>
         <span class="proj-tag">Graph Optimization</span>
         <span class="proj-tag">Foundation Model</span>
         <span class="proj-tag">Operations Research</span>
@@ -232,7 +232,7 @@
       <div class="stat-card"><span class="val">1,945</span><span class="lbl">Max network nodes</span></div>
       <div class="stat-card"><span class="val">24.5%</span><span class="lbl">Distance reduction</span></div>
       <div class="stat-card"><span class="val">5</span><span class="lbl">Task families</span></div>
-      <div class="stat-card"><span class="val">100×</span><span class="lbl">Faster than LKH3 / OR-Tools</span></div>
+      <div class="stat-card"><span class="val">100&times;</span><span class="lbl">Faster than LKH3 / OR-Tools</span></div>
     </div>
 
     <!-- PAPER -->
@@ -251,7 +251,7 @@
     <!-- OVERVIEW -->
     <div class="sec">
       <div class="sec-title">OVERVIEW</div>
-      <p>Graph optimization is foundational to modern operations — routing vehicles through road networks, detecting communities in social networks, and influence-based targeting. Yet prevailing approaches treat each task instance in isolation, discarding persistent topological knowledge embedded in the underlying network.</p>
+      <p>Graph optimization is foundational to modern operations &mdash; routing vehicles through road networks, detecting communities in social networks, and influence-based targeting. Yet prevailing approaches treat each task instance in isolation, discarding persistent topological knowledge embedded in the underlying network.</p>
       <p>GOFM shifts the focus from task-specific solvers to a task-agnostic structural prior. It internalizes network topology and distance geometry by encoding structure-aware random walks into a Transformer through progressive masked reconstruction. At inference, this learned prior facilitates diverse optimization tasks via lightweight constrained decoding, ensuring strict feasibility without retraining.</p>
     </div>
 
@@ -293,12 +293,12 @@
     <div class="sec">
       <div class="sec-title">KEY RESULTS</div>
       <p>GOFM achieves competitive solution quality compared to widely used OR solvers such as LKH3 and Google OR-Tools, with inference <strong>one to two orders of magnitude faster</strong> on city-scale graphs. Unlike neural baselines trained on complete-graph distributions, GOFM maintains <strong>near-perfect feasibility</strong> across all settings.</p>
-      <p>On the Amazon Last Mile dataset, GOFM delivers a <strong>24.5% reduction in total route distance</strong> — a direct impact on real-world logistics operations.</p>
+      <p>On the Amazon Last Mile dataset, GOFM delivers a <strong>24.5% reduction in total route distance</strong> &mdash; a direct impact on real-world logistics operations.</p>
     </div>
   </div>
 
   <footer class="footer">
-    <p>&copy; 2025 Yunhao Liang. All rights reserved.</p>
+    <p>&copy; 2026 Yunhao Liang. All rights reserved.</p>
   </footer>
 
   <!-- MODAL -->

@@ -278,34 +278,33 @@
     .tear-grip {
       position: absolute;
       top: 50%;
-      right: -4px;
-      width: 42px;
+      right: 10px;
+      width: 38px;
       height: 116px;
       transform: translateY(-50%);
-      border-radius: 12px 0 0 12px;
-      border: 1px solid rgba(243,239,232,0.16);
-      border-right: none;
+      border-radius: 12px;
+      border: 1px solid rgba(243,239,232,0.24);
       background:
-        linear-gradient(90deg, rgba(243,239,232,0.07), rgba(181,155,82,0.16)),
-        repeating-linear-gradient(to bottom, transparent, transparent 9px, rgba(243,239,232,0.13) 9px, rgba(243,239,232,0.13) 11px);
+        linear-gradient(90deg, rgba(243,239,232,0.12), rgba(181,155,82,0.30)),
+        repeating-linear-gradient(to bottom, transparent, transparent 8px, rgba(243,239,232,0.20) 8px, rgba(243,239,232,0.20) 10px);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(243,239,232,0.5);
+      color: rgba(243,239,232,0.78);
       font-family: var(--font-mono);
-      font-size: 0.78rem;
-      letter-spacing: -1px;
+      font-size: 1.1rem;
+      letter-spacing: -3px;
       z-index: 7;
-      box-shadow: -8px 0 18px rgba(0,0,0,0.28);
+      box-shadow: -8px 0 22px rgba(0,0,0,0.36);
       transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
       pointer-events: none;
-      writing-mode: vertical-rl;
+      text-shadow: 0 0 12px rgba(243,239,232,0.45);
     }
     .name-sticker:hover .tear-grip,
     .name-sticker:focus-visible .tear-grip,
     .name-sticker.dragging .tear-grip {
-      color: rgba(243,239,232,0.82);
-      transform: translateY(-50%) translateX(-4px);
+      color: rgba(243,239,232,0.95);
+      transform: translateY(-50%) translateX(-6px);
     }
     .name-sticker.peeling .tear-grip,
     .name-sticker.peeled .tear-grip { opacity: 0; }
@@ -909,19 +908,28 @@
       .nav-links { display: none; }
       .bg-text { display: none; }
       .slogan-line { font-size: 2.4rem; }
-      .name-sticker { width: 92vw; }
-      .sticker-top { padding: 18px 24px 12px; }
-      .sticker-bottom { padding: 24px 24px 30px; }
+      .name-sticker {
+        width: min(84vw, 334px);
+        max-width: calc(100vw - 56px);
+        transform: rotate(-1.2deg);
+      }
+      .name-sticker:hover { transform: rotate(-1deg) scale(1.01); }
+      .sticker-top { padding: 18px 22px 12px; }
+      .sticker-bottom { padding: 24px 16px 30px; }
       .sticker-hello { letter-spacing: 6px; }
       .sticker-name {
-        font-size: clamp(2.8rem, 14vw, 4rem);
-        letter-spacing: clamp(3px, 1.6vw, 6px);
+        font-size: clamp(2rem, 9.2vw, 2.9rem);
+        letter-spacing: clamp(1.5px, 0.9vw, 3.5px);
       }
       .hero-meta { padding: 0 14px; }
       .tear-grip {
-        width: 34px;
-        height: 96px;
-        right: -2px;
+        width: 38px;
+        height: 102px;
+        right: 10px;
+        background:
+          linear-gradient(90deg, rgba(243,239,232,0.18), rgba(181,155,82,0.48)),
+          repeating-linear-gradient(to bottom, transparent, transparent 8px, rgba(243,239,232,0.28) 8px, rgba(243,239,232,0.28) 10px);
+        color: rgba(243,239,232,0.96);
       }
       .label { line-height: 1.8; }
       .spider-panel { padding: 28px 22px; }
@@ -992,7 +1000,7 @@
               </div>
             </div>
           </div>
-          <div class="tear-grip" aria-hidden="true">&lsaquo;&lsaquo;</div>
+          <div class="tear-grip" aria-hidden="true">&lsaquo;&lsaquo;&lsaquo;</div>
           <div class="sticker-corner"></div>
         </div>
         <div class="hero-meta">

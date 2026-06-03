@@ -34,6 +34,7 @@
       scroll-behavior: smooth;
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,0.08) transparent;
+      overflow-x: hidden;
     }
 
     body {
@@ -91,7 +92,7 @@
       position: relative; min-height: 100vh;
       padding: 160px 48px 120px; z-index: 1;
     }
-    .section-inner { max-width: 1400px; margin: 0 auto; position: relative; }
+    .section-inner { width: 100%; max-width: 1400px; margin: 0 auto; position: relative; }
     .bg-text {
       position: absolute; font-family: var(--font-display);
       font-size: clamp(6rem, 15vw, 14rem); color: var(--text-dim);
@@ -355,7 +356,7 @@
     }
     .ask-row { display: flex; gap: 10px; }
     .ask-input {
-      flex: 1; background: rgba(255,255,255,0.03);
+      flex: 1; min-width: 0; background: rgba(255,255,255,0.03);
       border: 1px solid var(--border); border-radius: 30px;
       padding: 12px 20px; font-family: var(--font-body);
       font-size: 0.85rem; color: var(--text); outline: none;
@@ -387,13 +388,16 @@
     }
     .web-outer {
       position: relative;
-      width: 720px; height: 720px;
+      width: min(720px, calc(100vw - 64px));
+      max-width: 100%;
+      aspect-ratio: 1 / 1;
       margin: 0 auto;
       z-index: 2;
     }
     .web-container {
       position: relative;
       width: 100%; height: 100%;
+      transform-origin: center center;
     }
     .web-svg {
       width: 100%; height: 100%;
@@ -405,7 +409,8 @@
     .web-core-glow {
       position: absolute;
       top: 50%; left: 50%;
-      width: 320px; height: 320px;
+      width: 45%; height: 45%;
+      max-width: 320px; max-height: 320px;
       transform: translate(-50%, -50%);
       border-radius: 50%;
       background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, rgba(181,155,82,0.1) 35%, transparent 65%);
@@ -414,9 +419,9 @@
     .skill-node {
       position: absolute;
       transform: translate(-50%, -50%);
-      font-family: var(--font-mono); font-size: 0.68rem;
+      font-family: var(--font-mono); font-size: clamp(0.5rem, 1.8vw, 0.68rem);
       text-transform: uppercase; letter-spacing: 1px;
-      padding: 9px 16px;
+      padding: clamp(5px, 1.4vw, 9px) clamp(8px, 2.4vw, 16px);
       background: linear-gradient(145deg, rgba(18,18,30,0.96), rgba(8,8,14,0.93));
       border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
       color: var(--text-muted); white-space: nowrap;
@@ -446,8 +451,8 @@
     .web-center-label {
       position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      font-family: var(--font-display); font-size: 2.2rem;
-      letter-spacing: 8px; color: rgba(243,239,232,0.92);
+      font-family: var(--font-display); font-size: clamp(1.2rem, 6vw, 2.2rem);
+      letter-spacing: clamp(3px, 1.4vw, 8px); color: rgba(243,239,232,0.92);
       z-index: 5; pointer-events: none;
       text-shadow: 0 0 20px rgba(255,255,255,0.3), 0 0 40px rgba(139,124,246,0.36);
     }
@@ -675,7 +680,7 @@
     }
     .detail-close:hover { border-color: var(--text); color: var(--text); }
     .detail-number { font-family: var(--font-display); font-size: 5rem; color: var(--text-dim); line-height: 1; }
-    .detail-title { font-family: var(--font-display); font-size: 2.8rem; letter-spacing: 2px; margin: 8px 0 16px; }
+    .detail-title { font-family: var(--font-display); font-size: clamp(2rem, 8vw, 2.8rem); letter-spacing: 2px; margin: 8px 0 16px; }
     .detail-meta {
       font-family: var(--font-mono); font-size: 0.72rem;
       text-transform: uppercase; letter-spacing: 2px;
@@ -691,7 +696,7 @@
     }
     .detail-stat .val { font-family: var(--font-display); font-size: 2.2rem; color: var(--gold); display: block; }
     .detail-stat .lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
-    .detail-links { display: flex; gap: 10px; margin-top: 30px; }
+    .detail-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
     .detail-link {
       font-family: var(--font-mono); font-size: 0.72rem;
       text-transform: uppercase; letter-spacing: 1px;
@@ -733,6 +738,7 @@
       font-family: var(--font-mono); font-size: 0.75rem;
       text-transform: uppercase; letter-spacing: 1.5px;
       color: var(--text-muted); transition: all 0.3s;
+      overflow-wrap: anywhere;
     }
     .contact-btn:hover {
       border-color: var(--border-hover); color: var(--text); transform: translateX(6px);
@@ -767,9 +773,31 @@
       .projects-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
+      .section { padding: 110px 20px 72px; }
       .nav-links { display: none; }
+      .bg-text { display: none; }
       .slogan-line { font-size: 2.4rem; }
       .name-sticker { width: 95vw; }
+      .sticker-top { padding: 18px 24px 12px; }
+      .sticker-bottom { padding: 24px 24px 30px; }
+      .sticker-hello { letter-spacing: 6px; }
+      .sticker-name {
+        font-size: clamp(2.8rem, 14vw, 4rem);
+        letter-spacing: clamp(3px, 1.6vw, 6px);
+      }
+      .hero-meta { padding: 0 14px; }
+      .label { line-height: 1.8; }
+      .spider-panel { padding: 28px 22px; }
+      .ask-row { flex-direction: column; }
+      .ask-btn { width: 100%; }
+      .web-outer { width: min(560px, calc(100vw - 64px)); }
+      .skill-node { letter-spacing: 0.5px; }
+      .skill-logo, .skill-logo-fallback { width: 13px; height: 13px; }
+      .detail-content { width: calc(100% - 32px); padding: 34px 22px 28px; }
+      .detail-close { top: 12px; right: 12px; width: 38px; height: 38px; }
+      .detail-number { font-size: 3.5rem; }
+      .detail-link { width: 100%; text-align: center; }
+      .contact-btn { padding: 14px 16px; font-size: 0.68rem; letter-spacing: 1px; }
     }
   </style>
 </head>
@@ -1211,10 +1239,8 @@
     /* ========== SKILL NODES ========== */
     (function() {
       var c = document.getElementById('webContainer');
-      /* px coords relative to 900x900 container, centre = 450,450
-         Spread nodes WAY out 鈥?outside the inner rings, some near the edge */
-      /* container = 720脳720, centre = 360,360
-         Spread across inner / mid / outer rings 鈥?deliberately irregular */
+      /* Coordinates are based on the 720px design size and converted to
+         percentages so the web stays centered on narrow screens. */
       var skills = [
         /* ---- inner ring (~r 120) ---- */
         {name:'Python',     px:360, py:240,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'},
@@ -1238,6 +1264,16 @@
         {name:'HTML/CSS',   px: 82, py:560,  logo:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg'},
         {name:'GSAP',       px:140, py:130,  logo:'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/greensock.svg'}
       ];
+      function setNodePosition(node, skill) {
+        var rect = c.getBoundingClientRect();
+        var radialScale = rect.width < 560 ? 0.9 : 1;
+        var x = 360 + (skill.px - 360) * radialScale;
+        var y = 360 + (skill.py - 360) * radialScale;
+        node.style.left = (x / 720 * 100).toFixed(3) + '%';
+        node.style.top  = (y / 720 * 100).toFixed(3) + '%';
+      }
+
+      var nodes = [];
       skills.forEach(function(s) {
         var n = document.createElement('div');
         n.className = 'skill-node' + (s.hl ? ' highlight' : '');
@@ -1249,10 +1285,12 @@
         if (s.name === 'GSAP') {
           n.querySelector('.skill-logo').style.filter = 'invert(1) brightness(1.8)';
         }
-        /* position using px on 900px container */
-        n.style.left = s.px + 'px';
-        n.style.top  = s.py + 'px';
+        setNodePosition(n, s);
+        nodes.push({ node: n, skill: s });
         c.appendChild(n);
+      });
+      window.addEventListener('resize', function() {
+        nodes.forEach(function(item) { setNodePosition(item.node, item.skill); });
       });
     })();
 

@@ -590,18 +590,51 @@
     /* ---- PROJECTS ---- */
     #projects { overflow: hidden; }
     #projects .bg-text { top: 30px; right: -60px; }
+    .projects-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 32px;
+      margin-bottom: 44px;
+    }
     .projects-title {
       font-family: var(--font-display);
       font-size: clamp(2.5rem, 5vw, 4.5rem);
-      letter-spacing: 4px; margin-bottom: 60px;
+      letter-spacing: 4px;
+      margin-bottom: 14px;
+    }
+    .projects-subtitle {
+      max-width: 620px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+    .projects-link {
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 10px 22px;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+    .projects-link:hover { border-color: var(--gold); color: var(--gold); }
+    .project-group-label {
+      display: block;
+      margin: 0 0 14px;
     }
     .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
     .project-card {
       background: var(--bg-panel); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 0;
-      cursor: pointer; transition: all 0.5s cubic-bezier(0.22,1,0.36,1);
+      cursor: default; transition: all 0.5s cubic-bezier(0.22,1,0.36,1);
       position: relative; overflow: hidden;
     }
+    .project-card[data-href],
+    .project-card[data-project] { cursor: pointer; }
     .project-card::before {
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(135deg, rgba(255,255,255,0.02), transparent 60%);
@@ -646,6 +679,7 @@
       padding: 4px 10px; border: 1px solid var(--border);
       border-radius: 20px; color: var(--text-muted);
     }
+    .card-tag.highlight { border-color: rgba(181,155,82,0.75); color: var(--gold); }
     .card-desc { font-size: 0.85rem; line-height: 1.7; color: var(--text-muted); margin-bottom: 6px; }
     .card-list {
       list-style: none; padding: 0; margin: 0 0 16px;
@@ -664,6 +698,8 @@
       font-size: 0.7rem; text-transform: uppercase;
       letter-spacing: 2px; color: var(--text-muted); transition: color 0.3s;
     }
+    .card-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .card-actions .card-arrow { margin-top: 0; }
     .project-card:hover .card-arrow { color: var(--gold); }
 
     /* ---- EDUCATION ---- */
@@ -900,6 +936,8 @@
       .exp-header { flex-direction: column; align-items: flex-start; gap: 6px; }
       .contact-layout { flex-direction: column; gap: 50px; }
       .contact-right { flex: auto; width: 100%; }
+      .projects-heading { flex-direction: column; align-items: flex-start; gap: 18px; margin-bottom: 34px; }
+      .projects-title { margin-bottom: 10px; }
       .projects-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
@@ -967,7 +1005,7 @@
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#skills">Skills</a>
-      <a href="research.html">Research</a>
+      <a href="#projects">Research</a>
       <a href="#education">Education</a>
       <a href="#experience">Experience</a>
       <a href="interests.html">Beyond Research</a>
@@ -1072,10 +1110,16 @@
   <section class="section" id="projects">
     <div class="section-inner">
       <div class="bg-text">RESEARCH</div>
-      <div class="projects-title reveal">RESEARCH &amp; PROJECTS</div>
+      <div class="projects-heading reveal">
+        <div>
+          <div class="projects-title">RESEARCH &amp; PROJECTS</div>
+          <p class="projects-subtitle">Current work in AI for Operations Research, plus selected systems, data science, and optimization projects.</p>
+        </div>
+        <a class="projects-link" href="research.html">Full Research Page &rarr;</a>
+      </div>
 
       <!-- Current Research -->
-      <div class="label reveal" style="margin-bottom:14px;">Current Research</div>
+      <div class="label project-group-label reveal">Current Research</div>
       <div class="projects-grid" style="margin-bottom:20px;">
 
         <!-- GOFM -->
@@ -1085,16 +1129,28 @@
             <img src="images/gofm_architecture.png" alt="">
           </div>
           <div class="card-body">
-            <div class="card-title">Graph Optimization Foundation Model</div>
-            <div class="card-meta">The University of Hong Kong<br>Prof. Zuo-Jun Max Shen<br>Under Review &middot; Management Science</div>
-            <p class="card-desc">A pretrain-transfer framework for graph optimization:</p>
+            <div class="card-header">
+              <div class="card-number">01</div>
+              <div class="card-title">GRAPH OPTIMIZATION FOUNDATION MODEL (GOFM)</div>
+            </div>
+            <div class="card-meta">UC Berkeley &rarr; HKU &middot; Supervised by Prof. Zuo-Jun Max Shen<br>Under Review &middot; Management Science &middot; arXiv:2509.24256</div>
+            <div class="card-tags">
+              <span class="card-tag highlight">Under Review</span>
+              <span class="card-tag">Graph Optimization</span>
+              <span class="card-tag">Foundation Model</span>
+              <span class="card-tag">Operations Research</span>
+            </div>
+            <p class="card-desc">A pretrain-transfer framework for graph optimization. GOFM internalizes network topology through structure-aware random walks and Transformer-based masked reconstruction.</p>
             <ul class="card-list">
-              <li>Self-supervised pretraining on graph structure</li>
-              <li>Supports SP, TSP, CVRP &amp; more tasks</li>
-              <li>Amazon Last Mile case study</li>
+              <li>Self-supervised pretraining on graph structure via structure-aware random walks</li>
+              <li>Supports SP, TSP, CVRP, Community Detection &amp; Influence Maximization</li>
+              <li>Amazon Last Mile case study &mdash; 24.5% distance reduction</li>
+              <li>Near-perfect feasibility on city-scale sparse networks</li>
             </ul>
-            <a class="card-arrow" href="gofm-project.html">Full Project Page &rarr;</a>
-            <a class="card-arrow" href="https://arxiv.org/abs/2509.24256" target="_blank" style="margin-left:10px;">arXiv Paper &rarr;</a>
+            <div class="card-actions">
+              <a class="card-arrow" href="gofm-project.html">Full Project Page &rarr;</a>
+              <a class="card-arrow" href="https://arxiv.org/abs/2509.24256" target="_blank">arXiv Paper &rarr;</a>
+            </div>
           </div>
         </div>
 
@@ -1104,89 +1160,146 @@
             <div class="card-gradient" style="background:linear-gradient(135deg, rgba(139,124,246,0.4), rgba(59,15,42,0.35));"></div>
           </div>
           <div class="card-body">
-            <div class="card-title">Cooperative Multi-LLM Agents via Sequential Public Goods Games</div>
-            <div class="card-meta">The University of Hong Kong<br>Prof. Max Shen &amp; Prof. Shaochong Lin<br>May 2025 &ndash; Present<br>Under Review at AAAI 2026</div>
+            <div class="card-header">
+              <div class="card-number">02</div>
+              <div class="card-title">COOPERATIVE MULTI-LLM AGENTS VIA SEQUENTIAL PUBLIC GOODS GAMES</div>
+            </div>
+            <div class="card-meta">The University of Hong Kong &middot; Prof. Max Shen &amp; Prof. Shaochong Lin<br>May 2025 &ndash; Present &middot; Under Review at AAAI 2026 &middot; arXiv:2508.02076</div>
+            <div class="card-tags">
+              <span class="card-tag highlight">Under Review &middot; AAAI 2026</span>
+              <span class="card-tag">Multi-Agent Systems</span>
+              <span class="card-tag">LLM</span>
+              <span class="card-tag">Game Theory</span>
+            </div>
             <p class="card-desc">Building a game-theoretic multi-agent framework to study cooperation among LLM-based agents:</p>
             <ul class="card-list">
               <li>Sequential Public Goods Game with belief updating and conditional cooperation</li>
               <li>Subgame Perfect Nash Equilibrium analysis under full vs. partial observability</li>
               <li>Mechanism design for incentive alignment</li>
             </ul>
-            <p class="card-desc">Preprint: <a href="https://arxiv.org/abs/2508.02076" target="_blank" style="color:var(--gold);text-decoration:underline;">arXiv:2508.02076</a></p>
+            <div class="card-actions">
+              <a class="card-arrow" href="https://arxiv.org/abs/2508.02076" target="_blank">Preprint &rarr;</a>
+            </div>
           </div>
         </div>
 
       </div>
 
       <!-- Past Projects -->
-      <div class="label reveal" style="margin:44px 0 14px;">Past Projects</div>
+      <div class="label project-group-label reveal" style="margin-top:44px;">Past Projects</div>
       <div class="projects-grid">
 
         <div class="project-card reveal" data-href="uav-project.html">
           <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(139,124,246,0.35), rgba(59,15,42,0.3));"></div></div>
           <div class="card-body">
-            <div class="card-title">UAV Path Planning</div>
-            <div class="card-meta">UC Berkeley<br>Prof. Mark W. Mueller<br>Sep 2024 &ndash; May 2025</div>
+            <div class="card-header">
+              <div class="card-number">03</div>
+              <div class="card-title">UAV PATH PLANNING</div>
+            </div>
+            <div class="card-meta">UC Berkeley &middot; Prof. Mark W. Mueller<br>Sep 2024 &ndash; May 2025</div>
+            <div class="card-tags">
+              <span class="card-tag">Robotics</span>
+              <span class="card-tag">Optimization</span>
+              <span class="card-tag">IoT</span>
+            </div>
             <p class="card-desc">Optimizing UAV paths for agricultural data collection:</p>
             <ul class="card-list">
               <li>DARP &amp; MST algorithms</li>
-              <li>Data transmission</li>
+              <li>Data transmission optimization</li>
               <li>Automated decision-making</li>
             </ul>
-            <a class="card-arrow" href="uav-project.html">Learn More &rarr;</a>
+            <div class="card-actions">
+              <a class="card-arrow" href="uav-project.html">Learn More &rarr;</a>
+            </div>
           </div>
         </div>
 
         <div class="project-card reveal">
           <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(181,155,82,0.35), rgba(122,15,31,0.25));"></div></div>
           <div class="card-body">
-            <div class="card-title">Image-to-Text AI System</div>
+            <div class="card-header">
+              <div class="card-number">04</div>
+              <div class="card-title">IMAGE-TO-TEXT AI SYSTEM</div>
+            </div>
             <div class="card-meta">Independent Project<br>Feb 2025 &ndash; Mar 2025</div>
+            <div class="card-tags">
+              <span class="card-tag">Multimodal LLM</span>
+              <span class="card-tag">Vision</span>
+            </div>
             <p class="card-desc">Building a multimodal LLM pipeline to convert images (forms, handwriting) into structured text:</p>
             <ul class="card-list">
               <li>Prompt engineering and fine-tuning for Pix2Text / Pix2Struct</li>
               <li>Mini Program interface; backend in progress</li>
-              <li>Focus on accuracy and generalizability in unstructured data</li>
+              <li>Focus on accuracy in unstructured data</li>
             </ul>
-            <a class="card-arrow" href="https://github.com/YunhaoLiang/PictureToLatex--WechatMiniApp" target="_blank">GitHub &rarr;</a>
+            <div class="card-actions">
+              <a class="card-arrow" href="https://github.com/YunhaoLiang/PictureToLatex--WechatMiniApp" target="_blank">GitHub &rarr;</a>
+            </div>
           </div>
         </div>
 
         <div class="project-card reveal">
           <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(30,120,100,0.3), rgba(59,15,42,0.25));"></div></div>
           <div class="card-body">
-            <div class="card-title">Smart City Innovation</div>
+            <div class="card-header">
+              <div class="card-number">05</div>
+              <div class="card-title">SMART CITY INNOVATION</div>
+            </div>
             <div class="card-meta">Chongqing University<br>2023 &ndash; 2024</div>
+            <div class="card-tags">
+              <span class="card-tag">Data Science</span>
+              <span class="card-tag">Econometrics</span>
+              <span class="card-tag">Published</span>
+            </div>
             <p class="card-desc">Analyzing Smart City Pilot Plan impact:</p>
             <ul class="card-list">
               <li>Multi-period DID model</li>
               <li>296 cities study</li>
               <li>20-year data analysis</li>
             </ul>
-            <a class="card-arrow" href="https://doi.org/10.3390/su16188007" target="_blank">Paper &rarr;</a>
+            <div class="card-actions">
+              <a class="card-arrow" href="https://doi.org/10.3390/su16188007" target="_blank">Paper &rarr;</a>
+            </div>
           </div>
         </div>
 
         <div class="project-card reveal">
           <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(122,15,31,0.36), rgba(72,16,56,0.25));"></div></div>
           <div class="card-body">
-            <div class="card-title">Yin Music Platform</div>
+            <div class="card-header">
+              <div class="card-number">06</div>
+              <div class="card-title">YIN MUSIC PLATFORM</div>
+            </div>
             <div class="card-meta">Personal Project</div>
-            <p class="card-desc">Full-stack music platform:</p>
+            <div class="card-tags">
+              <span class="card-tag">Full-Stack</span>
+              <span class="card-tag">Spring Boot</span>
+              <span class="card-tag">Vue.js</span>
+            </div>
+            <p class="card-desc">Full-stack music streaming platform:</p>
             <ul class="card-list">
               <li>Spring Boot backend</li>
               <li>Vue.js frontend</li>
               <li>MySQL optimization</li>
             </ul>
-            <a class="card-arrow" href="https://github.com/YunhaoLiang/Yin-Music-Steaming-Platform" target="_blank">GitHub &rarr;</a>
+            <div class="card-actions">
+              <a class="card-arrow" href="https://github.com/YunhaoLiang/Yin-Music-Steaming-Platform" target="_blank">GitHub &rarr;</a>
+            </div>
           </div>
         </div>
 
         <div class="project-card reveal">
           <div class="card-visual"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(40,80,160,0.35), rgba(59,15,42,0.25));"></div></div>
           <div class="card-body">
-            <div class="card-title">Blood Donation System</div>
-            <div class="card-meta">University of Pittsburgh<br>Prof. Bo Zeng</div>
+            <div class="card-header">
+              <div class="card-number">07</div>
+              <div class="card-title">BLOOD DONATION SYSTEM</div>
+            </div>
+            <div class="card-meta">University of Pittsburgh &middot; Prof. Bo Zeng</div>
+            <div class="card-tags">
+              <span class="card-tag">Simulation</span>
+              <span class="card-tag">Healthcare OR</span>
+            </div>
             <p class="card-desc">Hospital transfusion simulation:</p>
             <ul class="card-list">
               <li>Simio modeling</li>
@@ -1529,6 +1642,18 @@
     })();
 
     /* ========== CARD NAVIGATION ========== */
+    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var id = link.getAttribute('href').slice(1);
+        var target = id ? document.getElementById(id) : null;
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (window.history && window.history.pushState) window.history.pushState(null, '', '#' + id);
+        else window.location.hash = id;
+      });
+    });
+
     document.querySelectorAll('.project-card[data-href]').forEach(function(card) {
       card.addEventListener('click', function(e) {
         if (e.target.closest('a')) return;
@@ -1812,16 +1937,16 @@
     /* ========== GSAP SCROLL ANIMATIONS ========== */
     gsap.utils.toArray('.reveal:not(.project-card)').forEach(function(el) {
       gsap.from(el, {
-        opacity: 0, y: 40, filter: 'blur(8px)',
-        duration: 1, ease: 'power3.out',
+        opacity: 0, y: 32,
+        duration: 0.75, ease: 'power3.out',
         scrollTrigger: { trigger: el, start: 'top 92%', once: true }
       });
     });
 
     gsap.utils.toArray('.project-card').forEach(function(card, i) {
       gsap.from(card, {
-        opacity: 0, y: 50, filter: 'blur(6px)',
-        duration: 0.8, delay: i * 0.12, ease: 'power3.out',
+        opacity: 0, y: 36,
+        duration: 0.65, delay: (i % 3) * 0.08, ease: 'power3.out',
         scrollTrigger: { trigger: card, start: 'top 94%', once: true }
       });
     });
